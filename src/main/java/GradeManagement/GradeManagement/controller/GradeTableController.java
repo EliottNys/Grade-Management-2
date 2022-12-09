@@ -27,7 +27,6 @@ import GradeManagement.GradeManagement.repository.CourseRepository;
 import GradeManagement.GradeManagement.repository.GradeTableRepository;
 import GradeManagement.GradeManagement.repository.MeanRepository;
 import GradeManagement.GradeManagement.repository.PercentageRepository;
-import GradeManagement.GradeManagement.repository.SectionRepository;
 import GradeManagement.GradeManagement.repository.StudentRepository;
 
 @CrossOrigin(origins = "http://localhost:8081")
@@ -43,9 +42,6 @@ public class GradeTableController {
 
   @Autowired
   private GradeTableRepository gradeTableRepository;
-
-  @Autowired
-  private SectionRepository SectionRepository;
 
   @Autowired
   private PercentageRepository PercentageRepository;
