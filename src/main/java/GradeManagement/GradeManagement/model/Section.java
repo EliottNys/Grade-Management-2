@@ -17,8 +17,12 @@ public class Section {
     @Column(name = "name")
     private String name;
 
+
     @Column(name = "credits")
     private Integer credits;
+
+    @Column(name = "level")
+    private Integer level;
 
     // @ManyToMany(fetch = FetchType.LAZY,
     // cascade = {
@@ -32,9 +36,10 @@ public class Section {
     public Section(){
     }
 
-    public Section(String name, Integer credits) {
+    public Section(String name, Integer credits,Integer level) {
         this.name = name;
         this.credits = credits;
+        this.level = level;
       }
 
     public long getId() {
@@ -66,6 +71,14 @@ public class Section {
 
     public void setCredits(Integer credits) {
         this.credits = credits;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
     @Override
