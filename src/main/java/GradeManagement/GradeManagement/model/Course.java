@@ -29,6 +29,9 @@ public class Course {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "semester")
+    private String semester;
+
     // @ManyToMany(fetch = FetchType.LAZY,
     // cascade = {
     //     CascadeType.PERSIST,
@@ -55,6 +58,14 @@ public class Course {
     public Course(String name) {
         this.name = name;
       }
+
+    public String getSemester() {
+        return semester;
+    }
+
+    public void setSemester(String semester) {
+        this.semester = semester;
+    }
 
     public Long getId() {
         return id;

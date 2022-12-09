@@ -60,7 +60,7 @@ public class SectionController {
     @PostMapping("/sections") ///mm student
     public ResponseEntity<Section> createSection(@RequestBody Section section) {
         Section _section = sectionRepository
-                .save(new Section(section.getName(), section.getCredits()));
+                .save(new Section(section.getName(), section.getCredits(),section.getLevel()));
         return new ResponseEntity<>(_section, HttpStatus.CREATED);
     }
 
