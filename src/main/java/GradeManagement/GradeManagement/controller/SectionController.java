@@ -19,16 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import GradeManagement.GradeManagement.exception.ResourceNotFoundException;
 import GradeManagement.GradeManagement.model.Section;
-import GradeManagement.GradeManagement.repository.CourseRepository;
 import GradeManagement.GradeManagement.repository.SectionRepository;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/api")
 public class SectionController {
-
-    @Autowired
-    private CourseRepository courseRepository;
 
     @Autowired
     SectionRepository sectionRepository;
