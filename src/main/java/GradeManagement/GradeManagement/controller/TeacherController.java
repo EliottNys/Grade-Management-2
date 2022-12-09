@@ -23,6 +23,7 @@ import GradeManagement.GradeManagement.model.Course;
 import GradeManagement.GradeManagement.model.Teacher;
 import GradeManagement.GradeManagement.repository.CourseRepository;
 import GradeManagement.GradeManagement.repository.TeacherRepository;
+import io.swagger.v3.oas.annotations.Operation;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -35,6 +36,7 @@ public class TeacherController {
     @Autowired
     TeacherRepository teacherRepository;
 
+    @Operation(summary = "Get all teacher")
     @GetMapping("/teachers") //ok
     public ResponseEntity<List<Teacher>> getAllTeachers(@RequestParam(required = false) String name) {
         List<Teacher> teachers = new ArrayList<Teacher>();
@@ -64,6 +66,7 @@ public class TeacherController {
         return new ResponseEntity<>(Teacher, HttpStatus.OK);
     }
 
+    
     @PostMapping("/courses/{courseId}/teachers") //ok
     public ResponseEntity<Teacher> addTeacherByCourse(@PathVariable(value = "courseId") Long courseId, @RequestBody Teacher teacherRequest) {
       Teacher teacher = courseRepository.findById(courseId).map(course -> {
