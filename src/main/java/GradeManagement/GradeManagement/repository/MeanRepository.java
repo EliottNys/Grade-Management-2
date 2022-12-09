@@ -13,6 +13,8 @@ public interface MeanRepository extends JpaRepository<Mean, Long> {
 
   List<Mean> findBySectionId(Long sectionId);
 
+  List<Mean> findBySectionLevel(Integer level);
+
   List<Mean> findByStudentId(Long studentId);
 
   Mean findByStudentIdAndSectionIdAndSchoolYear(Long studentId, Long sectionId, Integer SchoolYear);

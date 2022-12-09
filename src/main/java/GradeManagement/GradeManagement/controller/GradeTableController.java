@@ -23,12 +23,14 @@ import GradeManagement.GradeManagement.model.Mean;
 import GradeManagement.GradeManagement.model.Percentage;
 import GradeManagement.GradeManagement.model.Section;
 import GradeManagement.GradeManagement.model.Student;
+import GradeManagement.GradeManagement.model.Honor;
 import GradeManagement.GradeManagement.repository.CourseRepository;
 import GradeManagement.GradeManagement.repository.GradeTableRepository;
 import GradeManagement.GradeManagement.repository.MeanRepository;
 import GradeManagement.GradeManagement.repository.PercentageRepository;
 import GradeManagement.GradeManagement.repository.SectionRepository;
 import GradeManagement.GradeManagement.repository.StudentRepository;
+import GradeManagement.GradeManagement.repository.HonorRepository;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -51,10 +53,13 @@ public class GradeTableController {
   private PercentageRepository PercentageRepository;
 
   @Autowired
-  private MeanRepository MeanRepository;
+  private MeanRepository meanRepository;
 
   @Autowired
   private PercentageRepository percentageRepository;
+
+  @Autowired
+  private HonorRepository honorRepository;
 
 
   @GetMapping("/courses/{courseId}/students/{studentId}/grade")
@@ -165,13 +170,16 @@ public class GradeTableController {
 
     // List<Percentage> percentagesR = PercentageRepository.findByCourseId(courseId);
 
-    List<Mean> means = MeanRepository.findByStudentId(studentId);
+    List<Mean> means = meanRepository.findByStudentId(studentId);
     List<Section> sections_with_student = new ArrayList<Section>() ;   //sections where this student is subscribed
     means.forEach((n) -> sections_with_student.add(n.getSection()));
     List<Percentage> percentages = PercentageRepository.findByCourseId(courseId);
     List<Section> sections_with_course = new ArrayList<Section>();    //sections which contain this course
     percentages.forEach((n) -> sections_with_course.add(n.getSection()));
 
+    Integer sumbac = 0;
+    Integer summa = 0;
+    Integer meanBac = 0;
 
     for (Section section: sections_with_student){
       if (sections_with_course.contains(section)){  //intersection of the 2 lists
@@ -189,11 +197,44 @@ public class GradeTableController {
 
 
         };
-        Mean meanus = MeanRepository.findByStudentIdAndSectionIdAndSchoolYear(section.getId(),studentId,schoolYear);
+        Mean meanus = meanRepository.findByStudentIdAndSectionIdAndSchoolYear(section.getId(),studentId,schoolYear);
         meanus.setMean(mean);
       }
 
+      if (section.getLevel() < 4) {
+        sumbac += section.getCredits();
+      }
+      else if (section.getLevel() < 6 && section.getLevel() > 3){
+        summa += section.getCredits();
+      }
+
+      if (sumbac >= 180) {
+        List<Mean> meanBacList = meanRepository.findBySectionLevel(1);
+        meanBacList.addAll(meanRepository.findBySectionLevel(2));
+        meanBacList.addAll(meanRepository.findBySectionLevel(3));
+        for (Mean mean : meanBacList) {
+
+          meanBac += mean.getMean()*mean.getSection().getCredits()/180;
+          // ecrire ca dans distinction
+        }
+      }
+      if (summa >= 120) {
+        List<Mean> meanBacList = meanRepository.findBySectionLevel(1);
+        meanBacList.addAll(meanRepository.findBySectionLevel(2));
+        meanBacList.addAll(meanRepository.findBySectionLevel(3));
+        for (Mean mean : meanBacList) {
+
+          meanBac += mean.getMean()*mean.getSection().getCredits()/180;
+          // ecrire ca dans distinction
+        }
+      }
     }
+
+    // Get tt les section avec l'étudiant : si la somme des crédits ou y a 123 fait 180 ou la somme de 45 fait 120 alors calc
+    // Si l'étudiant a une mean pr chaque section pr 123 ou 45
+    // calc la moyenne
+
+
     return new ResponseEntity<>(gradeTableRepository.save(gradeTable), HttpStatus.OK);
 
   }
