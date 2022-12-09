@@ -14,12 +14,20 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 
+/**
+ * This class represents the courses
+ * @author Mimassi Joseph
+ * 
+ */
 @Data
 @Entity
 @Table(name = "courses")
+
 public class Course {
     
     @Id
@@ -42,6 +50,7 @@ public class Course {
     //     inverseJoinColumns = { @JoinColumn(name = "section_id") })
     // private Set<Section> sections = new HashSet<>();
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY,
     cascade = {
             CascadeType.PERSIST,
