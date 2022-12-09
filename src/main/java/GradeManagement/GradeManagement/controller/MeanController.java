@@ -124,16 +124,10 @@ public class MeanController {
 
       Course course = courseRepository.findById(courseId).orElseThrow(() -> new ResourceNotFoundException("Not found student with id = " + courseId));
       gradeTableRequest.setCourse(course);
-      gradeTableRepository.save(gradeTableRequest);
-
       Student student = studentRepository.findById(studentId).orElseThrow(() -> new ResourceNotFoundException("Not found student with id = " + studentId));
       gradeTableRequest.setStudent(student);
-      gradeTableRepository.save(gradeTableRequest);
-
       gradeTableRequest.setSchoolYear(schoolYear);
-      gradeTableRepository.save(gradeTableRequest);
-
-      gradeTableRequest.setSemester("Q"+String.valueOf(i));
+      gradeTableRequest.setSemester(course.getSemester());
       gradeTableRepository.save(gradeTableRequest);
 
 
