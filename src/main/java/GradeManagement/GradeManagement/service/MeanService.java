@@ -74,6 +74,15 @@ public class MeanService {
         List<Mean> Means = meanRepository.findBySectionId(sectionId);
         return new ResponseEntity<>(Means, HttpStatus.OK);
     }
+    public ResponseEntity<List<Mean>> getAllMeansBystudentId(@PathVariable(value = "studentId") Long studentId) {
+
+        if (!sectionRepository.existsById(studentId)) {
+            throw new ResourceNotFoundException("Not found section with id = " + studentId);
+        }
+
+        List<Mean> Means = meanRepository.findByStudentId(studentId);
+        return new ResponseEntity<>(Means, HttpStatus.OK);
+    }
 
     public ResponseEntity<Mean> getMeansById(@PathVariable(value = "id") Long id) {
         Mean mean = meanRepository.findById(id)

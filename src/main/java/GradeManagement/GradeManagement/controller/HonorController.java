@@ -17,15 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import GradeManagement.GradeManagement.model.Honor;
-import GradeManagement.GradeManagement.repository.HonorRepository;
 import GradeManagement.GradeManagement.service.HonorService;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/api")
 public class HonorController {
-    @Autowired
-    HonorRepository honorRepository;
+
 
     @Autowired
     HonorService honorService;

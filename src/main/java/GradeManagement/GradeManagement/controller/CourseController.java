@@ -16,20 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import GradeManagement.GradeManagement.model.Course;
-import GradeManagement.GradeManagement.repository.CourseRepository;
-import GradeManagement.GradeManagement.repository.TeacherRepository;
 import GradeManagement.GradeManagement.service.CourseService;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/api")
 public class CourseController {
-
-  @Autowired
-  CourseRepository courseRepository;
-
-  @Autowired
-  TeacherRepository teacherRepository;
 
   @Autowired
   CourseService courseService;
