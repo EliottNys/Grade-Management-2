@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Honorpow ")
+@Table(name = "Honor")
 public class Honor {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "honor_generator")
@@ -22,7 +22,7 @@ public class Honor {
     private String honor;
 
     @Column(name = "grade")
-    private Integer grade;
+    private Double grade;
 
 
 
@@ -41,7 +41,7 @@ public class Honor {
         return honor;
     }
 
-    public Integer getGrade() {
+    public Double getGrade() {
         return grade;
     }
 
@@ -65,7 +65,7 @@ public class Honor {
         this.honor = honor;
     }
 
-    public void setGrade(Integer grade) {
+    public void setGrade(Double grade) {
         this.grade = grade;
     }
 
@@ -76,7 +76,7 @@ public class Honor {
     public Honor(){
     }
 
-    public Honor(Student student, String honor, Integer grade,String degree ) {
+    public Honor(Student student, String honor, Double grade,String degree ) {
         this.student = student;
         this.honor = honor;
         this.grade = grade;

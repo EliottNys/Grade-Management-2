@@ -119,7 +119,7 @@ public class MeanController {
 
   public void InscriptionCours(Long courseId, Long studentId, Integer schoolYear){
 
-    for( int i=1; i<4; i++){
+
       GradeTable gradeTableRequest = new GradeTable();
 
       Course course = courseRepository.findById(courseId).orElseThrow(() -> new ResourceNotFoundException("Not found student with id = " + courseId));
@@ -130,9 +130,6 @@ public class MeanController {
       gradeTableRequest.setSemester(course.getSemester());
       gradeTableRepository.save(gradeTableRequest);
 
-
-
-    };
 
 
   };
@@ -154,48 +151,12 @@ public class MeanController {
     meanRepository.save(MeanRequest);
 
 
-
-
-
       List<Percentage> percentages = percentageRepository.findBySectionId(sectionId);
 
       for ( Percentage percent : percentages) {
         Long courseId = percent.getCourse().getId();
-        InscriptionCours(courseId,studentId,2022);
+        InscriptionCours(courseId,studentId,MeanRequest.getSchoolYear());
       };
-
-    return new ResponseEntity<>(HttpStatus.CREATED);
-  }
-
-
-  @PostMapping("/sections/{sectionId}/students/{studentId}/{schoolYear}/means")
-  public ResponseEntity<Mean> createMeanwithSchoolYear(@PathVariable(value = "sectionId") Long sectionId,@PathVariable(value = "studentId") Long studentId,
-                                                       @PathVariable(value = "schoolYear") Integer schoolYear, @RequestBody Mean MeanRequest) {
-
-    // Mean mean = sectionRepository.findById(sectionId).map(section -> {
-    //   MeanRequest.setSection(section);
-    // return MeanRepository.save(MeanRequest);
-
-    // }).orElseThrow(() -> new ResourceNotFoundException("Not found student with id = " + sectionId));
-    MeanRequest.setMean(19);
-    Section section = sectionRepository.findById(sectionId).orElseThrow(() -> new ResourceNotFoundException("Not found student with id = " + sectionId));
-    MeanRequest.setSection(section);
-    MeanRequest.setSchoolYear(schoolYear);
-    Student student = studentRepository.findById(studentId).orElseThrow(() -> new ResourceNotFoundException("Not found student with id = " + studentId));
-    MeanRequest.setStudent(student);
-
-    meanRepository.save(MeanRequest);
-
-
-
-
-
-    List<Percentage> percentages = percentageRepository.findBySectionId(sectionId);
-
-    for ( Percentage percent : percentages) {
-      Long courseId = percent.getCourse().getId();
-      InscriptionCours(courseId,studentId,schoolYear);
-    };
 
     return new ResponseEntity<>(HttpStatus.CREATED);
   }
