@@ -52,10 +52,7 @@ public class SectionController {
         return sectionService.updateSection(id,section);
     }
 
-     @GetMapping("/courses/{courseId}/sections")
-     public ResponseEntity<List<Section>> getAllSectionsByCourseId(@PathVariable(value = "courseId") Long courseId) {
-       return sectionService.getAllSectionsByCourseId(courseId);
-    }
+
 
     @DeleteMapping("/sections/{id}") //ok
     public ResponseEntity<HttpStatus> deleteSection(@PathVariable("id") long id) {

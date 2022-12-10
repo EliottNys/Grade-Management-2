@@ -70,14 +70,4 @@ public class SectionService {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    public ResponseEntity<List<Section>> getAllSectionsByCourseId(@PathVariable(value = "courseId") Long courseId) {
-        if (!courseRepository.existsById(courseId)) {
-            throw new ResourceNotFoundException("Not found Course  with id = " + courseId);
-        }
-
-        List<Section> sections = sectionRepository.findSectionsByCoursesId(courseId);
-        return new ResponseEntity<>(sections, HttpStatus.OK);
-    }
-
-
 }
