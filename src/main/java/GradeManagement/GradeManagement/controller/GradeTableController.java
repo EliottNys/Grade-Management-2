@@ -171,8 +171,8 @@ public class GradeTableController {
 
     Integer sumBac = 0;
     Integer sumMa = 0;
-    Integer meanBac = 0;
-    Integer meanMa = 0;
+    Double meanBac = 0.0;
+    Double meanMa = 0.0;
 
     for (Section section: sections_with_student){
       if (sections_with_course.contains(section)){  //intersection of the 2 lists
@@ -210,7 +210,7 @@ public class GradeTableController {
             meanBac = null;
             break;
           }
-          meanBac += mean.getMean()*mean.getSection().getCredits()/18000;
+          meanBac += (double) mean.getMean()*mean.getSection().getCredits()/18000;
 
         }
         if (meanBac != null) {
@@ -227,7 +227,7 @@ public class GradeTableController {
             meanMa = null;
             break;
           }
-          meanMa += mean.getMean()*mean.getSection().getCredits()/12000;
+          meanMa += (double)  mean.getMean()*mean.getSection().getCredits()/12000;
         }
         if (meanMa != null) {
           Student student = studentRepository.findById(studentId).orElseThrow(() -> new ResourceNotFoundException("Not found student with id = " + studentId));
@@ -240,7 +240,7 @@ public class GradeTableController {
     return new ResponseEntity<>(gradeTableRepository.save(gradeTable), HttpStatus.OK);
   }
 
-  public String GetHonorLevel(Integer grade){
+  public String GetHonorLevel(Double grade){
     if (12 <= grade && grade < 14) {
       return "Cum Fructu";
     }
