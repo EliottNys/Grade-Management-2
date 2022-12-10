@@ -144,14 +144,6 @@ public class GradeTableController {
     gradeTable.setGrade(gradeTableRequest.getGrade());
 
     return new ResponseEntity<>(gradeTableRepository.save(gradeTable), HttpStatus.OK);
-
-    // Trigger : on modifie (put) une note = note passe de 'null' à une valeur
-    //Input : studentId
-    //Put(studentID, CourseID, Schoolyear, quadri)
-    //trouver la section grace au courseid
-    //trouver tous les cours dans la section
-    //verifier si tous les grades entre ces cours et l'élève sont pas null
-    //si ils ont tous une note, calculer moyenne des dernières notes de chaque course
   }
 
 
@@ -177,9 +169,10 @@ public class GradeTableController {
     List<Section> sections_with_course = new ArrayList<Section>();    //sections which contain this course
     percentages.forEach((n) -> sections_with_course.add(n.getSection()));
 
-    Integer sumbac = 0;
-    Integer summa = 0;
+    Integer sumBac = 0;
+    Integer sumMa = 0;
     Integer meanBac = 0;
+    Integer meanMa = 0;
 
     for (Section section: sections_with_student){
       if (sections_with_course.contains(section)){  //intersection of the 2 lists
@@ -195,48 +188,74 @@ public class GradeTableController {
           Integer percent = percentageRepository.findBySectionIdAndCourseId(section.getId(),course.getId()).get(0).getPercentage();
           mean += grade.getGrade()*percent;
 
-
         };
-        Mean meanus = meanRepository.findByStudentIdAndSectionIdAndSchoolYear(section.getId(),studentId,schoolYear);
+        Mean meanus = meanRepository.findByStudentIdAndSectionIdAndSchoolYear(studentId, section.getId(),schoolYear);
+
         meanus.setMean(mean);
       }
 
       if (section.getLevel() < 4) {
-        sumbac += section.getCredits();
+        sumBac += section.getCredits();
       }
       else if (section.getLevel() < 6 && section.getLevel() > 3){
-        summa += section.getCredits();
+        sumMa += section.getCredits();
       }
 
-      if (sumbac >= 180) {
+      if (sumBac >=180) {
         List<Mean> meanBacList = meanRepository.findBySectionLevel(1);
         meanBacList.addAll(meanRepository.findBySectionLevel(2));
         meanBacList.addAll(meanRepository.findBySectionLevel(3));
         for (Mean mean : meanBacList) {
+          if (mean.getMean() == null ) {
+            meanBac = null;
+            break;
+          }
+          meanBac += mean.getMean()*mean.getSection().getCredits()/18000;
 
-          meanBac += mean.getMean()*mean.getSection().getCredits()/180;
-          // ecrire ca dans distinction
+        }
+        if (meanBac != null) {
+          Student student = studentRepository.findById(studentId).orElseThrow(() -> new ResourceNotFoundException("Not found student with id = " + studentId));
+          Honor honor = new Honor(student, GetHonorLevel(meanBac), meanBac, "Bac");
+          honorRepository.save(honor);
         }
       }
-      if (summa >= 120) {
-        List<Mean> meanBacList = meanRepository.findBySectionLevel(1);
-        meanBacList.addAll(meanRepository.findBySectionLevel(2));
-        meanBacList.addAll(meanRepository.findBySectionLevel(3));
-        for (Mean mean : meanBacList) {
-
-          meanBac += mean.getMean()*mean.getSection().getCredits()/180;
-          // ecrire ca dans distinction
+      if (sumMa >= 120) {
+        List<Mean> meanMaList = meanRepository.findBySectionLevel(4);
+        meanMaList.addAll(meanRepository.findBySectionLevel(5));
+        for (Mean mean : meanMaList) {
+          if (mean.getMean() == null ) {
+            meanMa = null;
+            break;
+          }
+          meanMa += mean.getMean()*mean.getSection().getCredits()/12000;
         }
+        if (meanMa != null) {
+          Student student = studentRepository.findById(studentId).orElseThrow(() -> new ResourceNotFoundException("Not found student with id = " + studentId));
+          Honor honor = new Honor(student,GetHonorLevel(meanMa),meanMa,"Ma");
+          honorRepository.save(honor);
+        }
+
       }
     }
-
-    // Get tt les section avec l'étudiant : si la somme des crédits ou y a 123 fait 180 ou la somme de 45 fait 120 alors calc
-    // Si l'étudiant a une mean pr chaque section pr 123 ou 45
-    // calc la moyenne
-
-
     return new ResponseEntity<>(gradeTableRepository.save(gradeTable), HttpStatus.OK);
+  }
 
+  public String GetHonorLevel(Integer grade){
+    if (12 <= grade && grade < 14) {
+      return "Cum Fructu";
+    }
+    if (14 <= grade && grade < 16) {
+      return "Cum laude";
+    }
+    if (16 <= grade && grade < 18) {
+      return "Magna cum laude";
+    }
+    if (18 <= grade && grade < 20) {
+      return "Summa cum laude";
+    }
+    else {
+      return "None";
+    }
   }
 
   @DeleteMapping("/grade/{id}")
