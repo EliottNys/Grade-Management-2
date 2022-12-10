@@ -28,6 +28,7 @@ import GradeManagement.GradeManagement.repository.GradeTableRepository;
 import GradeManagement.GradeManagement.repository.MeanRepository;
 import GradeManagement.GradeManagement.repository.PercentageRepository;
 import GradeManagement.GradeManagement.repository.StudentRepository;
+import GradeManagement.GradeManagement.service.GradeTableService;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -52,70 +53,29 @@ public class GradeTableController {
   @Autowired
   private PercentageRepository percentageRepository;
 
+  @Autowired
+  private GradeTableService gradeTableService;
+
 
   @GetMapping("/courses/{courseId}/students/{studentId}/grade")
   public ResponseEntity<List<GradeTable>> getAllgradeBystudentIdAndCourseId(@PathVariable(value = "studentId") Long studentId,@PathVariable(value = "courseId") Long courseId) {
-    if (!studentRepository.existsById(studentId)) {
-      throw new ResourceNotFoundException("Not found student with id = " + studentId);
-    }
-
-    if (!courseRepository.existsById(courseId)) {
-      throw new ResourceNotFoundException("Not found Course with id = " + courseId);
-    }
-
-    List<GradeTable> grade = gradeTableRepository.findByCourseIdAndStudentId(courseId,studentId);
-    return new ResponseEntity<>(grade, HttpStatus.OK);
+    return gradeTableService.getAllgradeBystudentIdAndCourseId(studentId,courseId);
   }
 
   @GetMapping("/grade/{id}")
   public ResponseEntity<GradeTable> getgradeById(@PathVariable(value = "id") Long id) {
-    GradeTable gradeTable = gradeTableRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Not found GradeTable with id = " + id));
-
-    return new ResponseEntity<>(gradeTable, HttpStatus.OK);
+    return gradeTableService.getgradeById(id);
   }
 
   @GetMapping("/grade")
   public ResponseEntity<List<GradeTable>> getAllGrades() {
-      List<GradeTable> grades = new ArrayList<GradeTable>();
-
-          gradeTableRepository.findAll().forEach(grades::add);
-
-      if (grades.isEmpty()) {
-          return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-      }
-
-      // gradeTableRepository.fetchAllGradeTables().forEach(System.out::println); 
-      // System.out.println((gradeTableRepository.fetchAllGradeTables()));
-      // List<GradeTable> grady = gradeTableRepository.fetchAllGradeTables();
-
-      return new ResponseEntity<>(grades, HttpStatus.OK);
+      return gradeTableService.getAllGrades();
   }
 
   @PostMapping("/courses/{courseId}/students/{studentId}/grade")
   public ResponseEntity<GradeTable> createGradeTable(@PathVariable(value = "courseId") Long courseId,@PathVariable(value = "studentId") Long studentId,
       @RequestBody GradeTable gradeTableRequest) {
-
-      Course course = courseRepository.findById(courseId).orElseThrow(() -> new ResourceNotFoundException("Not found student with id = " + courseId));
-      gradeTableRequest.setCourse(course);
-      gradeTableRepository.save(gradeTableRequest);
-
-      Student student = studentRepository.findById(studentId).orElseThrow(() -> new ResourceNotFoundException("Not found student with id = " + studentId));
-      gradeTableRequest.setStudent(student);
-      gradeTableRepository.save(gradeTableRequest);
-
-      // ici que l'on doit add Mean _mean = meanRepository.save(new Mean())
-
-      // List<GradeTable> ListofCourseByStudent = gradeTableRepository.findByCourseIdAndStudentId(courseId,studentId);
-
-
-      // ici que l'on doit add Mean _mean = meanRepository.save(new Mean())
-
-        
-      System.out.println(gradeTableRepository);
-      //Inscriptions
-
-    return new ResponseEntity<>(HttpStatus.CREATED);
+    return gradeTableService.createGradeTable(courseId,studentId,gradeTableRequest);
   }
 
 
@@ -123,95 +83,22 @@ public class GradeTableController {
 
   @PutMapping("/grade/{id}")
   public ResponseEntity<GradeTable> updateGradeTable(@PathVariable("id") long id, @RequestBody GradeTable gradeTableRequest) {
-    GradeTable gradeTable = gradeTableRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("gradeTableId " + id + "not found"));
-
-    // gradeTable.setStudent(gradeTableRequest.getStudent());
-    // gradeTable.setCourse(gradeTableRequest.getCourse());
-    gradeTable.setSemester(gradeTableRequest.getSemester());
-    gradeTable.setSchoolYear(gradeTableRequest.getSchoolYear());
-    gradeTable.setComment(gradeTableRequest.getComment());
-    gradeTable.setComment_teacher(gradeTableRequest.getComment_teacher());
-    gradeTable.setGrade(gradeTableRequest.getGrade());
-
-    return new ResponseEntity<>(gradeTableRepository.save(gradeTable), HttpStatus.OK);
-
-    // Trigger : on modifie (put) une note = note passe de 'null' à une valeur
-    //Input : studentId
-    //Put(studentID, CourseID, Schoolyear, quadri)
-    //trouver la section grace au courseid
-    //trouver tous les cours dans la section
-    //verifier si tous les grades entre ces cours et l'élève sont pas null
-    //si ils ont tous une note, calculer moyenne des dernières notes de chaque course
+    return gradeTableService.updateGradeTable(id, gradeTableRequest);
   }
 
 
   @PutMapping("/grade/{courseID}/{studentID}/{SchoolYear}/{semester}")
   public ResponseEntity<GradeTable> updateGrade(@PathVariable("courseID") long courseId,@PathVariable("studentID") long studentId,@PathVariable("SchoolYear") Integer schoolYear,@PathVariable("semester") String semester,@RequestBody GradeTable gradeTableRequest) {
-    GradeTable gradeTable = gradeTableRepository.findByCourseIdAndStudentIdAndSchoolYearAndSemester(courseId, studentId, schoolYear, semester);
-            // .orElseThrow(() -> new ResourceNotFoundException("gradeTableId " + id + "not found"));
-
-    // gradeTable.setStudent(gradeTableRequest.getStudent());
-    // gradeTable.setCourse(gradeTableRequest.getCourse());
-    //gradeTable.setSemester(gradeTableRequest.getSemester());
-    // gradeTable.setSchoolYear(gradeTableRequest.getSchoolYear());
-    gradeTable.setComment(gradeTableRequest.getComment());
-    gradeTable.setComment_teacher(gradeTableRequest.getComment_teacher());
-    gradeTable.setGrade(gradeTableRequest.getGrade());
-
-    // List<Percentage> percentagesR = PercentageRepository.findByCourseId(courseId);
-
-    List<Mean> means = MeanRepository.findByStudentId(studentId);
-    List<Section> sections_with_student = new ArrayList<Section>() ;   //sections where this student is subscribed
-    means.forEach((n) -> sections_with_student.add(n.getSection()));
-    List<Percentage> percentages = PercentageRepository.findByCourseId(courseId);
-    List<Section> sections_with_course = new ArrayList<Section>();    //sections which contain this course
-    percentages.forEach((n) -> sections_with_course.add(n.getSection()));
-
-
-    for (Section section: sections_with_student){
-      if (sections_with_course.contains(section)){  //intersection of the 2 lists
-        List<Course> courses = new ArrayList<Course>();
-        PercentageRepository.findBySectionId(section.getId()).forEach((n) -> courses.add(n.getCourse()));
-        Integer mean = 0;
-        for (Course course : courses ){
-          GradeTable grade = gradeTableRepository.findByCourseIdAndStudentIdAndSchoolYearAndSemester(course.getId(),studentId, schoolYear, course.getSemester());
-          if (grade.getGrade() == null) {
-            mean = null;
-            break;
-          }
-          Integer percent = percentageRepository.findBySectionIdAndCourseId(section.getId(),course.getId()).get(0).getPercentage();
-          mean += grade.getGrade()*percent;
-
-
-        };
-        Mean meanus = MeanRepository.findByStudentIdAndSectionIdAndSchoolYear(section.getId(),studentId,schoolYear);
-        meanus.setMean(mean);
-      }
-
-    }
-    return new ResponseEntity<>(gradeTableRepository.save(gradeTable), HttpStatus.OK);
-
+    return gradeTableService.updateGrade(courseId,studentId,schoolYear,semester,gradeTableRequest);
   }
 
   @DeleteMapping("/grade/{id}")
   public ResponseEntity<HttpStatus> deleteGradeTable(@PathVariable("id") long id) {
-    gradeTableRepository.deleteById(id);
-
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    return gradeTableService.deleteGradeTable(id);
   }
   
   @DeleteMapping("/courses/{coursesId}/students/{studentId}/grade")
-  public ResponseEntity<List<GradeTable>> deleteAllgradeOfstudentAndCourses(@PathVariable(value = "studentId") Long studentId, @PathVariable(value = "courseId") Long courseId) {
-    if (!studentRepository.existsById(studentId)) {
-      throw new ResourceNotFoundException("Not found student with id = " + studentId);
-    }
-
-    if (!courseRepository.existsById(courseId)) {
-      throw new ResourceNotFoundException("Not found Course with id = " + courseId);
-    }
-
-    gradeTableRepository.deleteByCourseIdAndStudentId(courseId, studentId);
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  public ResponseEntity<List<GradeTable>> deleteGradeTableByCourseIdAndStudentId(@PathVariable(value = "studentId") Long studentId, @PathVariable(value = "courseId") Long courseId) {
+    return gradeTableService.deleteGradeTableByCourseIdAndStudentId(courseId,studentId);
   }
 }
