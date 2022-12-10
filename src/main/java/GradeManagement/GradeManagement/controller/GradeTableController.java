@@ -1,6 +1,5 @@
 package GradeManagement.GradeManagement.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,42 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import GradeManagement.GradeManagement.exception.ResourceNotFoundException;
-import GradeManagement.GradeManagement.model.Course;
 import GradeManagement.GradeManagement.model.GradeTable;
-import GradeManagement.GradeManagement.model.Mean;
-import GradeManagement.GradeManagement.model.Percentage;
-import GradeManagement.GradeManagement.model.Section;
-import GradeManagement.GradeManagement.model.Student;
-import GradeManagement.GradeManagement.repository.CourseRepository;
-import GradeManagement.GradeManagement.repository.GradeTableRepository;
-import GradeManagement.GradeManagement.repository.MeanRepository;
-import GradeManagement.GradeManagement.repository.PercentageRepository;
-import GradeManagement.GradeManagement.repository.StudentRepository;
 import GradeManagement.GradeManagement.service.GradeTableService;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/api")
 public class GradeTableController {
-
-  @Autowired
-  private StudentRepository studentRepository;
-
-  @Autowired
-  private CourseRepository courseRepository;
-
-  @Autowired
-  private GradeTableRepository gradeTableRepository;
-
-  @Autowired
-  private PercentageRepository PercentageRepository;
-
-  @Autowired
-  private MeanRepository MeanRepository;
-
-  @Autowired
-  private PercentageRepository percentageRepository;
 
   @Autowired
   private GradeTableService gradeTableService;
