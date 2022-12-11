@@ -92,7 +92,20 @@ class TeacherControllerTest {
     }
 
     @Test
-    void createTeachers() {
+    void createTeachers() throws Exception {
+        // given
+        Teacher teacher = new Teacher("DENEUVE Catherine");
+
+        // when
+        ResultActions response = mockMvc.perform(post("/api/teachers")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(teacher)));
+
+        // then
+        response.andDo(print()).
+                andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name",
+                        is(teacher.getName())));
     }
 
     @Test
