@@ -150,7 +150,26 @@ class TeacherControllerTest {
     }
 
     @Test
-    void deleteTeacher() {
+    void deleteTeacher() throws Exception {
+        // given
+        Teacher savedTeacher = new Teacher("LAGARDE Christine");
+        teacherRepository.save(savedTeacher);
+        List<Teacher> listOfTeacher = new ArrayList<>();
+        listOfTeacher.add(new Teacher("HALLYDAY Johnny"));
+        listOfTeacher.add(new Teacher("BREL Jacques"));
+        teacherRepository.saveAll(listOfTeacher);
+
+        // when
+        ResultActions response = mockMvc.perform(delete("/api/teachers/{id}", savedTeacher.getId()));
+        ResultActions get_response = mockMvc.perform(get("/api/teachers"));
+
+        // then
+        response.andExpect(status().isNoContent())
+                .andDo(print());
+        get_response.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.size()",
+                        is(listOfTeacher.size())));
     }
 
     @Test
