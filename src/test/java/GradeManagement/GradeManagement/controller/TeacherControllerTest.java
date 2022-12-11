@@ -128,6 +128,24 @@ class TeacherControllerTest {
     }
 
     @Test
+    void updateTeacherInvalidId() throws Exception {
+        // given
+        Teacher savedTeacher = new Teacher("DES GALLES Chariot");
+        teacherRepository.save(savedTeacher);
+
+        Teacher updatedTeacher = new Teacher("DE GAULLE Charles");
+
+        // when
+        ResultActions response = mockMvc.perform(put("/api/teachers/{id}", savedTeacher.getId()+1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedTeacher)));
+
+        // then
+        response.andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
     void assignCourseToTeacher() {
     }
 
