@@ -1,6 +1,5 @@
 package GradeManagement.GradeManagement.controller;
 
-import GradeManagement.GradeManagement.model.Student;
 import GradeManagement.GradeManagement.model.Teacher;
 import GradeManagement.GradeManagement.repository.TeacherRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -72,6 +71,20 @@ class TeacherControllerTest {
         response.andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(jsonPath("$.name", is(teacher.getName())));
+    }
+
+    @Test
+    void getTeacherByInvalidId() throws Exception {
+        // given
+        Teacher teacher = new Teacher("DUJARDIN Jean");
+        teacherRepository.save(teacher);
+
+        // when
+        ResultActions response = mockMvc.perform(get("/api/teachers/{id}", teacher.getId()+1));
+
+        // then
+        response.andExpect(status().isNotFound())
+                .andDo(print());
     }
 
     @Test
