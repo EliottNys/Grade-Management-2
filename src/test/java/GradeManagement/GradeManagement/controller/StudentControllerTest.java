@@ -2,7 +2,6 @@ package GradeManagement.GradeManagement.controller;
 
 import GradeManagement.GradeManagement.model.Student;
 import GradeManagement.GradeManagement.repository.StudentRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -123,6 +122,25 @@ class StudentControllerTest {
         response.andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(jsonPath("$.name", is(updatedStudent.getName())));
+    }
+
+    @Test
+    void updateStudentInvalidId() throws Exception {
+        // given
+        long studentId = 1L;
+        Student savedStudent = new Student("DES GALLES Chariot");
+        studentRepository.save(savedStudent);
+
+        Student updatedStudent = new Student("DE GAULLE Charles");
+
+        // when
+        ResultActions response = mockMvc.perform(put("/api/students/{id}", studentId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedStudent)));
+
+        // then
+        response.andExpect(status().isNotFound())
+                .andDo(print());
     }
 
     @Test
