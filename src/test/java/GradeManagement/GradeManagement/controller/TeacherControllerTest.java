@@ -109,7 +109,22 @@ class TeacherControllerTest {
     }
 
     @Test
-    void updateTeacher() {
+    void updateTeacher() throws Exception {
+        // given
+        Teacher savedTeacher = new Teacher("DES GALLES Chariot");
+        teacherRepository.save(savedTeacher);
+
+        Teacher updatedTeacher = new Teacher("DE GAULLE Charles");
+
+        // when
+        ResultActions response = mockMvc.perform(put("/api/teachers/{id}", savedTeacher.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedTeacher)));
+
+        // then
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.name", is(updatedTeacher.getName())));
     }
 
     @Test
