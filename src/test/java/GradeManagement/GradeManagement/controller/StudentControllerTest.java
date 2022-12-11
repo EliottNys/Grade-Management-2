@@ -62,22 +62,37 @@ class StudentControllerTest {
     @Test
     void getStudentById() throws Exception {
         // given
-        Student employee = new Student("DUJARDIN Jean");
-        studentRepository.save(employee);
+        Student student = new Student("DUJARDIN Jean");
+        studentRepository.save(student);
 
         // when
-        ResultActions response = mockMvc.perform(get("/api/students/{id}", employee.getId()));
+        ResultActions response = mockMvc.perform(get("/api/students/{id}", student.getId()));
 
         // then
         response.andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(jsonPath("$.name", is(employee.getName())));
+                .andExpect(jsonPath("$.name", is(student.getName())));
+    }
+
+    @Test
+    void getStudentByInvalidId() throws Exception {
+        // given
+        long studentId = 2L;
+        Student employee = new Student("DUJARDIN Jean");
+        studentRepository.save(employee);
+
+        // when
+        ResultActions response = mockMvc.perform(get("/api/students/{id}", studentId));
+
+        // then
+        response.andExpect(status().isNotFound())
+                .andDo(print());
     }
 
     @Test
     void createStudent() throws Exception {
         // given
-        Student student = new Student("NYS Eliott");
+        Student student = new Student("DENEUVE Catherine");
 
         // when
         ResultActions response = mockMvc.perform(post("/api/students")
