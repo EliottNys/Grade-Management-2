@@ -107,7 +107,22 @@ class StudentControllerTest {
     }
 
     @Test
-    void updateStudent() {
+    void updateStudent() throws Exception {
+        // given
+        Student savedStudent = new Student("DES GALLES Chariot");
+        studentRepository.save(savedStudent);
+
+        Student updatedStudent = new Student("DE GAULLE Charles");
+
+        // when
+        ResultActions response = mockMvc.perform(put("/api/students/{id}", savedStudent.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedStudent)));
+
+        // then
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.name", is(updatedStudent.getName())));
     }
 
     @Test
