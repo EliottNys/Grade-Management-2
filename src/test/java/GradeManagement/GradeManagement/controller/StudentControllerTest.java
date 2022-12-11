@@ -77,11 +77,11 @@ class StudentControllerTest {
     void getStudentByInvalidId() throws Exception {
         // given
         long studentId = 2L;
-        Student employee = new Student("DUJARDIN Jean");
-        studentRepository.save(employee);
+        Student student = new Student("DUJARDIN Jean");
+        studentRepository.save(student);
 
         // when
-        ResultActions response = mockMvc.perform(get("/api/students/{id}", studentId));
+        ResultActions response = mockMvc.perform(get("/api/students/{id}", student.getId()+1));
 
         // then
         response.andExpect(status().isNotFound())
@@ -127,14 +127,13 @@ class StudentControllerTest {
     @Test
     void updateStudentInvalidId() throws Exception {
         // given
-        long studentId = 1L;
         Student savedStudent = new Student("DES GALLES Chariot");
         studentRepository.save(savedStudent);
 
         Student updatedStudent = new Student("DE GAULLE Charles");
 
         // when
-        ResultActions response = mockMvc.perform(put("/api/students/{id}", studentId)
+        ResultActions response = mockMvc.perform(put("/api/students/{id}", savedStudent.getId()+1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updatedStudent)));
 
@@ -144,10 +143,33 @@ class StudentControllerTest {
     }
 
     @Test
-    void deleteStudent() {
+    void deleteStudent() throws Exception {
+        // given
+        Student savedStudent = new Student("LAGARDE Christine");
+        studentRepository.save(savedStudent);
+
+        // when
+        ResultActions response = mockMvc.perform(delete("/api/students/{id}", savedStudent.getId()));
+
+        // then
+        response.andExpect(status().isNoContent())
+                .andDo(print());
     }
 
     @Test
-    void deleteAllStudents() {
+    void deleteAllStudents() throws Exception {
+        // given
+        List<Student> listOfStudents = new ArrayList<>();
+        listOfStudents.add(new Student("LABBE Pierre"));
+        listOfStudents.add(new Student("COLUCHE"));
+        listOfStudents.add(new Student("MBAPPE Kylian"));
+        studentRepository.saveAll(listOfStudents);
+
+        // when
+        ResultActions response = mockMvc.perform(delete("/api/students"));
+
+        // then
+        response.andExpect(status().isNoContent())
+                .andDo(print());
     }
 }
