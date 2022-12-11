@@ -76,7 +76,6 @@ class StudentControllerTest {
     @Test
     void getStudentByInvalidId() throws Exception {
         // given
-        long studentId = 2L;
         Student student = new Student("DUJARDIN Jean");
         studentRepository.save(student);
 
