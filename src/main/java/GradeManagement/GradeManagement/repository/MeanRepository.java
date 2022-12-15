@@ -23,6 +23,4 @@ public interface MeanRepository extends JpaRepository<Mean, Long> {
   
   @Transactional
   void deleteBySectionIdAndStudentId(long SectionId, Long studentId);
-
-  List<Mean> findBySectionLevel(Integer level);
 }

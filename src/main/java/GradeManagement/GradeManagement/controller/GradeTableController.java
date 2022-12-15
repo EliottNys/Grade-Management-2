@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import GradeManagement.GradeManagement.model.GradeTable;
-
+import GradeManagement.GradeManagement.repository.HonorRepository;
 import GradeManagement.GradeManagement.service.GradeTableService;
 
 
