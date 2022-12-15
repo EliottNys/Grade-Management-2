@@ -8,4 +8,5 @@ import GradeManagement.GradeManagement.model.Section;
 
 public interface SectionRepository extends JpaRepository<Section, Long> {
     List<Section> findByNameContaining(String name);
+
 }
