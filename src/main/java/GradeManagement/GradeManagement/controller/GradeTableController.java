@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import GradeManagement.GradeManagement.model.GradeTable;
+
 import GradeManagement.GradeManagement.service.GradeTableService;
+
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -24,7 +26,12 @@ import GradeManagement.GradeManagement.service.GradeTableService;
 public class GradeTableController {
 
   @Autowired
+
   private GradeTableService gradeTableService;
+
+
+  @Autowired
+  private HonorRepository honorRepository;
 
 
   @GetMapping("/courses/{courseId}/students/{studentId}/grade")
