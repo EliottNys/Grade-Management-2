@@ -105,7 +105,24 @@ class SectionControllerTest {
     }
 
     @Test
-    void updateSection() {
+    void updateSection() throws Exception {
+        // given
+        Section savedSection = new Section("Architecture quality", 2, 3);
+        sectionRepository.save(savedSection);
+
+        Section updatedSection = new Section("Architecture and software quality", 4, 4);
+
+        // when
+        ResultActions response = mockMvc.perform(put("/api/sections/{id}", savedSection.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedSection)));
+
+        // then
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.name", is(updatedSection.getName())))
+                .andExpect(jsonPath("$.credits", is(updatedSection.getCredits())))
+                .andExpect(jsonPath("$.level", is(updatedSection.getLevel())));
     }
 
     @Test
