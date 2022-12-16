@@ -30,6 +30,10 @@ public class PercentageService {
     @Autowired
     private PercentageRepository percentageRepository;
 
+    /**
+     * Get all contents of the table "percentage"
+     * @return HTTP response (OK if successful, NO_CONTENT if not found, INTERNAL_SERVER_ERROR if error occur)
+     */
     public ResponseEntity<List<Percentage>> getAllPercentages() {
         List<Percentage> percentages = new ArrayList<Percentage>();
 
@@ -42,6 +46,12 @@ public class PercentageService {
         return new ResponseEntity<>(percentages, HttpStatus.OK);
     }
 
+    /**
+     * Get all contents of the "percentage" table by courseId and sectionId
+     * @param courseId the id of the course
+     * @param sectionId the id of the section
+     * @return HTTP response (OK if successful, NO_CONTENT if not found, INTERNAL_SERVER_ERROR if error occur)
+     */
     public ResponseEntity<List<Percentage>> getAllPercentagesByCourseIdAndsectionId(@PathVariable(value = "courseId") Long courseId,@PathVariable(value = "sectionId") Long sectionId) {
         if (!courseRepository.existsById(courseId)) {
             throw new ResourceNotFoundException("Not found course with id = " + courseId);
@@ -55,6 +65,12 @@ public class PercentageService {
         return new ResponseEntity<>(percentages, HttpStatus.OK);
     }
 
+
+    /**
+     * Get all contents of the "percentage" table sectionId
+     * @param sectionId the id of the section
+     * @return HTTP response (OK if successful, NO_CONTENT if not found, INTERNAL_SERVER_ERROR if error occur)
+     */
     public ResponseEntity<List<Percentage>> getAllPercentagesBySectionId(@PathVariable(value = "sectionId") Long sectionId) {
 
         if (!sectionRepository.existsById(sectionId)) {
@@ -65,6 +81,13 @@ public class PercentageService {
         return new ResponseEntity<>(percentages, HttpStatus.OK);
     }
 
+
+
+    /**
+     * Get all contents of the "percentage" table by courseId and sectionId
+     * @param courseId the id of the course
+     * @return HTTP response (OK if successful, NO_CONTENT if not found, INTERNAL_SERVER_ERROR if error occur)
+     */
     public ResponseEntity<List<Percentage>> getAllPercentagesByCourseId(@PathVariable(value = "CourseId") Long courseId) {
 
         if (!sectionRepository.existsById(courseId)) {
@@ -74,6 +97,13 @@ public class PercentageService {
         List<Percentage> percentages = percentageRepository.findByCourseId(courseId);
         return new ResponseEntity<>(percentages, HttpStatus.OK);
     }
+
+
+    /**
+     * Get all contents of the "percentage" table by courseId and sectionId
+     * @param id the id of the percentage
+     * @return HTTP response (OK if successful, NO_CONTENT if not found, INTERNAL_SERVER_ERROR if error occur)
+     */
     public ResponseEntity<Percentage> getPercentagesById(@PathVariable(value = "id") Long id) {
         Percentage percentage = percentageRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found percentage with id = " + id));
@@ -81,6 +111,14 @@ public class PercentageService {
         return new ResponseEntity<>(percentage, HttpStatus.OK);
     }
 
+
+    /**
+     * Get all contents of the "percentage" table by courseId and sectionId
+     * @param courseId the id of the course
+     * @param sectionId the id of the section
+     * @param percentageRequest the body of the request
+     * @return HTTP response (OK if successful, NO_CONTENT if not found, INTERNAL_SERVER_ERROR if error occur)
+     */
     public ResponseEntity<Percentage> createPercentage(@PathVariable(value = "sectionId") Long sectionId,@PathVariable(value = "courseId") Long courseId,
                                                        @RequestBody Percentage percentageRequest) {
 
@@ -96,6 +134,12 @@ public class PercentageService {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    /**
+     * Update all contents of the percentage "table"
+     * @param id the id of the "percentage" table
+     * @param percentageRequest the body of the request
+     * @return HTTP response (OK if successful, NO_CONTENT if not found, INTERNAL_SERVER_ERROR if error occur)
+     */
     public ResponseEntity<Percentage> updatePercentage(@PathVariable("id") long id, @RequestBody Percentage percentageRequest) {
         Percentage percentage = percentageRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("PercentageId " + id + "not found"));
@@ -105,12 +149,23 @@ public class PercentageService {
         return new ResponseEntity<>(percentageRepository.save(percentage), HttpStatus.OK);
     }
 
+    /**
+     * Get all contents of the "percentage" table by courseId and sectionId
+     * @param id the id of the "percentage" table
+     * @return HTTP response (OK if successful, NO_CONTENT if not found, INTERNAL_SERVER_ERROR if error occur)
+     */
     public ResponseEntity<HttpStatus> deletePercentage(@PathVariable("id") long id) {
         percentageRepository.deleteById(id);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * Delete all contents of the "percentage" table by ID
+     * @param courseId the id of the course
+     * @param sectionId the id of the section
+     * @return HTTP response (OK if successful, NO_CONTENT if not found, INTERNAL_SERVER_ERROR if error occur)
+     */
     public ResponseEntity<List<Percentage>> deletePercentagesByCourseAndSection(@PathVariable(value = "courseId") Long courseId, @PathVariable(value = "sectionId") Long sectionId) {
         if (!courseRepository.existsById(courseId)) {
             throw new ResourceNotFoundException("Not found course with id = " + courseId);
