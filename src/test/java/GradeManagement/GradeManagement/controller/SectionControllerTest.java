@@ -149,6 +149,20 @@ class SectionControllerTest {
     }
 
     @Test
-    void deleteAllSections() {
+    void deleteAllSections() throws Exception {
+        // given
+        List<Section> listOfSections = new ArrayList<>();
+        listOfSections.add(new Section("Architecture and software quality", 4, 4));
+        listOfSections.add(new Section("Mobile development", 3, 4));
+        listOfSections.add(new Section("Software engineering 1", 7, 3));
+        sectionRepository.saveAll(listOfSections);
+
+        // when
+        ResultActions response = mockMvc.perform(delete("/api/sections"));
+        ResultActions get_response = mockMvc.perform(get("/api/sections"));
+
+        // then
+        response.andExpect(status().isNoContent())
+                .andDo(print());
     }
 }
