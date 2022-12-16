@@ -16,8 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -103,7 +102,22 @@ class CourseControllerTest {
     }
 
     @Test
-    void updateCourse() {
+    void updateCourse() throws Exception {
+        // given
+        Course savedCourse = new Course("Soft Archi");
+        courseRepository.save(savedCourse);
+
+        Course updatedCourse = new Course("Software Architecture");
+
+        // when
+        ResultActions response = mockMvc.perform(put("/api/courses/{id}", savedCourse.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedCourse)));
+
+        // then
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.name", is(updatedCourse.getName())));
     }
 
     @Test
