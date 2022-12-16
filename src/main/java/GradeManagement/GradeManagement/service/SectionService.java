@@ -67,6 +67,7 @@ public class SectionService {
 
         _section.setName(section.getName());
         _section.setCredits(section.getCredits());
+        _section.setLevel(section.getLevel());
 
         return new ResponseEntity<>(sectionRepository.save(_section), HttpStatus.OK);
     }
