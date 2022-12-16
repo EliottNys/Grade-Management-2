@@ -66,6 +66,20 @@ class CourseControllerTest {
     }
 
     @Test
+    void getCourseByInvalidId() throws Exception {
+        // given
+        Course course = new Course("Software Architecture");
+        courseRepository.save(course);
+
+        // when
+        ResultActions response = mockMvc.perform(get("/api/courses/{id}", course.getId()+1));
+
+        // then
+        response.andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
     void createCourse() {
     }
 
