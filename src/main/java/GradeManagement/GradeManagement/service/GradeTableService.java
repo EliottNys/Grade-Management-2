@@ -5,24 +5,24 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.stereotype.Service;
 
 import GradeManagement.GradeManagement.exception.ResourceNotFoundException;
 import GradeManagement.GradeManagement.model.Course;
 import GradeManagement.GradeManagement.model.GradeTable;
+import GradeManagement.GradeManagement.model.Honor;
 import GradeManagement.GradeManagement.model.Mean;
 import GradeManagement.GradeManagement.model.Percentage;
 import GradeManagement.GradeManagement.model.Section;
 import GradeManagement.GradeManagement.model.Student;
-import GradeManagement.GradeManagement.model.Honor;
 import GradeManagement.GradeManagement.repository.CourseRepository;
 import GradeManagement.GradeManagement.repository.GradeTableRepository;
+import GradeManagement.GradeManagement.repository.HonorRepository;
 import GradeManagement.GradeManagement.repository.MeanRepository;
 import GradeManagement.GradeManagement.repository.PercentageRepository;
 import GradeManagement.GradeManagement.repository.StudentRepository;
-import GradeManagement.GradeManagement.repository.HonorRepository;
 
 @Service
 public class GradeTableService {
@@ -50,6 +50,12 @@ public class GradeTableService {
     @Autowired
     private PercentageRepository percentageRepository;
 
+        /**
+    * Get the grade of a student for a particular course
+    * @param studentId The id of the student
+    * @param courseId The id of the course
+    * @return HTTP response (OK if successful, NO_CONTENT if not found, INTERNAL_SERVER_ERROR if error occur)
+    */
     public ResponseEntity<List<GradeTable>> getAllgradeBystudentIdAndCourseId(@PathVariable(value = "studentId") Long studentId,@PathVariable(value = "courseId") Long courseId) {
         if (!studentRepository.existsById(studentId)) {
             throw new ResourceNotFoundException("Not found student with id = " + studentId);
@@ -63,6 +69,11 @@ public class GradeTableService {
         return new ResponseEntity<>(grade, HttpStatus.OK);
     }
 
+            /**
+    * Get a grade by its id
+    * @param id the id of the grade
+    * @return HTTP response (OK if successful, NO_CONTENT if not found, INTERNAL_SERVER_ERROR if error occur)
+    */
     public ResponseEntity<GradeTable> getgradeById(@PathVariable(value = "id") Long id) {
         GradeTable gradeTable = gradeTableRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found GradeTable with id = " + id));
@@ -70,6 +81,10 @@ public class GradeTableService {
         return new ResponseEntity<>(gradeTable, HttpStatus.OK);
     }
 
+            /**
+    * Get all grades
+    * @return HTTP response (OK if successful, NO_CONTENT if not found, INTERNAL_SERVER_ERROR if error occur)
+    */
     public ResponseEntity<List<GradeTable>> getAllGrades() {
         List<GradeTable> grades = new ArrayList<GradeTable>();
 
@@ -82,6 +97,13 @@ public class GradeTableService {
         return new ResponseEntity<>(grades, HttpStatus.OK);
     }
 
+            /**
+    * Create the grade of a student in a course, you have to assign a null value to each variable to register a student to a course
+    * @param studentId The id of the student
+    * @param courseId The id of the course
+    * @param gradeTableRequest it's the body of the request
+    * @return HTTP response (OK if successful, NO_CONTENT if not found, INTERNAL_SERVER_ERROR if error occur)
+    */
     public ResponseEntity<GradeTable> createGradeTable(@PathVariable(value = "courseId") Long courseId,@PathVariable(value = "studentId") Long studentId,
                                                        @RequestBody GradeTable gradeTableRequest) {
 
@@ -98,6 +120,12 @@ public class GradeTableService {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+            /**
+    * Uptade the grade by its id
+    * @param id The id of the grade
+    * @param gradeTableRequest it's the body of the request
+    * @return HTTP response (OK if successful, NO_CONTENT if not found, INTERNAL_SERVER_ERROR if error occur)
+    */
     public ResponseEntity<GradeTable> updateGradeTable(@PathVariable("id") long id, @RequestBody GradeTable gradeTableRequest) {
         GradeTable gradeTable = gradeTableRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("gradeTableId " + id + "not found"));
@@ -112,6 +140,11 @@ public class GradeTableService {
 
     }
 
+            /**
+    * Get the level of the honor in function of the grade
+    * @param grade Any grade
+    * @return HTTP response (OK if successful, NO_CONTENT if not found, INTERNAL_SERVER_ERROR if error occur)
+    */
     public String GetHonorLevel(Double grade){
         if (12 <= grade && grade < 14) {
             return "Cum Fructu";
@@ -130,6 +163,16 @@ public class GradeTableService {
         }
     }
 
+            /**
+    * Update the grade of a studnet in a particular course, this method is used because initally every student is register in a course with all the parameters at "null", it's with this update that a student get it's grade.
+    This function is also used to calculate the mean of a section depending on the grade of the course in this particular section 
+    * @param studentId The id of the student
+    * @param courseId The id of the course
+    * @param schoolYear the schoolYear when the student obtains the grade 
+    * @param semester the semester when the student obtains the grade
+    * @param gradeTableRequest it's the body of the request
+    * @return HTTP response (OK if successful, NO_CONTENT if not found, INTERNAL_SERVER_ERROR if error occur)
+    */
     public ResponseEntity<GradeTable> updateGrade(@PathVariable("courseID") long courseId,@PathVariable("studentID") long studentId,@PathVariable("SchoolYear") Integer schoolYear,@PathVariable("semester") String semester,@RequestBody GradeTable gradeTableRequest) {
         GradeTable gradeTable = gradeTableRepository.findByCourseIdAndStudentIdAndSchoolYearAndSemester(courseId, studentId, schoolYear, semester);
         gradeTable.setComment(gradeTableRequest.getComment());
@@ -214,12 +257,23 @@ public class GradeTableService {
         return new ResponseEntity<>(gradeTableRepository.save(gradeTable), HttpStatus.OK);
     }
 
+            /**
+    * Delete a grade by it's id
+    * @param id The id of the grade
+    * @return HTTP response (OK if successful, NO_CONTENT if not found, INTERNAL_SERVER_ERROR if error occur)
+    */
     public ResponseEntity<HttpStatus> deleteGradeTable(@PathVariable("id") long id) {
         gradeTableRepository.deleteById(id);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+            /**
+    * delete a grade by its courseId and its studentId
+    * @param studentId The id of the student
+    * @param courseId The id of the course
+    * @return HTTP response (OK if successful, NO_CONTENT if not found, INTERNAL_SERVER_ERROR if error occur)
+    */
     public ResponseEntity<List<GradeTable>> deleteGradeTableByCourseIdAndStudentId( @PathVariable(value = "courseId") Long courseId,@PathVariable(value = "studentId") Long studentId) {
         if (!studentRepository.existsById(studentId)) {
             throw new ResourceNotFoundException("Not found student with id = " + studentId);

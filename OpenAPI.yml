@@ -1,0 +1,3050 @@
+---
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8081
+    description: Generated server url
+paths:
+  "/api/{teacherId}/course/{courseId}":
+    put:
+      tags:
+        - teacher-controller
+      summary: Assign a course to a teacher
+      operationId: assignCourseToTeacher
+      parameters:
+        - name: teacherId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Teacher"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/{courseId}/teacher/{teacherId}":
+    put:
+      tags:
+        - course-controller
+      summary: Update a course by its courseId and teacherId
+      operationId: assignTeacherToCourse
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: teacherId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Course"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/teachers/{id}":
+    get:
+      tags:
+        - teacher-controller
+      summary: Get a teacher by id
+      operationId: getTeacherById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Teacher"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    put:
+      tags:
+        - teacher-controller
+      summary: Update a teacher
+      operationId: updateTeacher
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Teacher"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Teacher"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    delete:
+      tags:
+        - teacher-controller
+      summary: Delete a teacher
+      operationId: deleteTeacher
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: string
+                enum:
+                  - 100 CONTINUE
+                  - 101 SWITCHING_PROTOCOLS
+                  - 102 PROCESSING
+                  - 103 CHECKPOINT
+                  - 200 OK
+                  - 201 CREATED
+                  - 202 ACCEPTED
+                  - 203 NON_AUTHORITATIVE_INFORMATION
+                  - 204 NO_CONTENT
+                  - 205 RESET_CONTENT
+                  - 206 PARTIAL_CONTENT
+                  - 207 MULTI_STATUS
+                  - 208 ALREADY_REPORTED
+                  - 226 IM_USED
+                  - 300 MULTIPLE_CHOICES
+                  - 301 MOVED_PERMANENTLY
+                  - 302 FOUND
+                  - 302 MOVED_TEMPORARILY
+                  - 303 SEE_OTHER
+                  - 304 NOT_MODIFIED
+                  - 305 USE_PROXY
+                  - 307 TEMPORARY_REDIRECT
+                  - 308 PERMANENT_REDIRECT
+                  - 400 BAD_REQUEST
+                  - 401 UNAUTHORIZED
+                  - 402 PAYMENT_REQUIRED
+                  - 403 FORBIDDEN
+                  - 404 NOT_FOUND
+                  - 405 METHOD_NOT_ALLOWED
+                  - 406 NOT_ACCEPTABLE
+                  - 407 PROXY_AUTHENTICATION_REQUIRED
+                  - 408 REQUEST_TIMEOUT
+                  - 409 CONFLICT
+                  - 410 GONE
+                  - 411 LENGTH_REQUIRED
+                  - 412 PRECONDITION_FAILED
+                  - 413 PAYLOAD_TOO_LARGE
+                  - 413 REQUEST_ENTITY_TOO_LARGE
+                  - 414 URI_TOO_LONG
+                  - 414 REQUEST_URI_TOO_LONG
+                  - 415 UNSUPPORTED_MEDIA_TYPE
+                  - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+                  - 417 EXPECTATION_FAILED
+                  - 418 I_AM_A_TEAPOT
+                  - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+                  - 420 METHOD_FAILURE
+                  - 421 DESTINATION_LOCKED
+                  - 422 UNPROCESSABLE_ENTITY
+                  - 423 LOCKED
+                  - 424 FAILED_DEPENDENCY
+                  - 425 TOO_EARLY
+                  - 426 UPGRADE_REQUIRED
+                  - 428 PRECONDITION_REQUIRED
+                  - 429 TOO_MANY_REQUESTS
+                  - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+                  - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+                  - 500 INTERNAL_SERVER_ERROR
+                  - 501 NOT_IMPLEMENTED
+                  - 502 BAD_GATEWAY
+                  - 503 SERVICE_UNAVAILABLE
+                  - 504 GATEWAY_TIMEOUT
+                  - 505 HTTP_VERSION_NOT_SUPPORTED
+                  - 506 VARIANT_ALSO_NEGOTIATES
+                  - 507 INSUFFICIENT_STORAGE
+                  - 508 LOOP_DETECTED
+                  - 509 BANDWIDTH_LIMIT_EXCEEDED
+                  - 510 NOT_EXTENDED
+                  - 511 NETWORK_AUTHENTICATION_REQUIRED
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/students/{id}":
+    get:
+      tags:
+        - student-controller
+      summary: Get a student by id
+      operationId: getStudentById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Student"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    put:
+      tags:
+        - student-controller
+      summary: Update a student by id
+      operationId: updateStudent
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Student"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Student"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    delete:
+      tags:
+        - student-controller
+      summary: Delete a student by id
+      operationId: deleteStudent
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: string
+                enum:
+                  - 100 CONTINUE
+                  - 101 SWITCHING_PROTOCOLS
+                  - 102 PROCESSING
+                  - 103 CHECKPOINT
+                  - 200 OK
+                  - 201 CREATED
+                  - 202 ACCEPTED
+                  - 203 NON_AUTHORITATIVE_INFORMATION
+                  - 204 NO_CONTENT
+                  - 205 RESET_CONTENT
+                  - 206 PARTIAL_CONTENT
+                  - 207 MULTI_STATUS
+                  - 208 ALREADY_REPORTED
+                  - 226 IM_USED
+                  - 300 MULTIPLE_CHOICES
+                  - 301 MOVED_PERMANENTLY
+                  - 302 FOUND
+                  - 302 MOVED_TEMPORARILY
+                  - 303 SEE_OTHER
+                  - 304 NOT_MODIFIED
+                  - 305 USE_PROXY
+                  - 307 TEMPORARY_REDIRECT
+                  - 308 PERMANENT_REDIRECT
+                  - 400 BAD_REQUEST
+                  - 401 UNAUTHORIZED
+                  - 402 PAYMENT_REQUIRED
+                  - 403 FORBIDDEN
+                  - 404 NOT_FOUND
+                  - 405 METHOD_NOT_ALLOWED
+                  - 406 NOT_ACCEPTABLE
+                  - 407 PROXY_AUTHENTICATION_REQUIRED
+                  - 408 REQUEST_TIMEOUT
+                  - 409 CONFLICT
+                  - 410 GONE
+                  - 411 LENGTH_REQUIRED
+                  - 412 PRECONDITION_FAILED
+                  - 413 PAYLOAD_TOO_LARGE
+                  - 413 REQUEST_ENTITY_TOO_LARGE
+                  - 414 URI_TOO_LONG
+                  - 414 REQUEST_URI_TOO_LONG
+                  - 415 UNSUPPORTED_MEDIA_TYPE
+                  - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+                  - 417 EXPECTATION_FAILED
+                  - 418 I_AM_A_TEAPOT
+                  - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+                  - 420 METHOD_FAILURE
+                  - 421 DESTINATION_LOCKED
+                  - 422 UNPROCESSABLE_ENTITY
+                  - 423 LOCKED
+                  - 424 FAILED_DEPENDENCY
+                  - 425 TOO_EARLY
+                  - 426 UPGRADE_REQUIRED
+                  - 428 PRECONDITION_REQUIRED
+                  - 429 TOO_MANY_REQUESTS
+                  - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+                  - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+                  - 500 INTERNAL_SERVER_ERROR
+                  - 501 NOT_IMPLEMENTED
+                  - 502 BAD_GATEWAY
+                  - 503 SERVICE_UNAVAILABLE
+                  - 504 GATEWAY_TIMEOUT
+                  - 505 HTTP_VERSION_NOT_SUPPORTED
+                  - 506 VARIANT_ALSO_NEGOTIATES
+                  - 507 INSUFFICIENT_STORAGE
+                  - 508 LOOP_DETECTED
+                  - 509 BANDWIDTH_LIMIT_EXCEEDED
+                  - 510 NOT_EXTENDED
+                  - 511 NETWORK_AUTHENTICATION_REQUIRED
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/sections/{id}":
+    get:
+      tags:
+        - section-controller
+      summary: Get a section by id
+      operationId: getSectionById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Section"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    put:
+      tags:
+        - section-controller
+      summary: Update a section by id
+      operationId: updateSection
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Section"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Section"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    delete:
+      tags:
+        - section-controller
+      summary: Delete a section by id
+      operationId: deleteSection
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: string
+                enum:
+                  - 100 CONTINUE
+                  - 101 SWITCHING_PROTOCOLS
+                  - 102 PROCESSING
+                  - 103 CHECKPOINT
+                  - 200 OK
+                  - 201 CREATED
+                  - 202 ACCEPTED
+                  - 203 NON_AUTHORITATIVE_INFORMATION
+                  - 204 NO_CONTENT
+                  - 205 RESET_CONTENT
+                  - 206 PARTIAL_CONTENT
+                  - 207 MULTI_STATUS
+                  - 208 ALREADY_REPORTED
+                  - 226 IM_USED
+                  - 300 MULTIPLE_CHOICES
+                  - 301 MOVED_PERMANENTLY
+                  - 302 FOUND
+                  - 302 MOVED_TEMPORARILY
+                  - 303 SEE_OTHER
+                  - 304 NOT_MODIFIED
+                  - 305 USE_PROXY
+                  - 307 TEMPORARY_REDIRECT
+                  - 308 PERMANENT_REDIRECT
+                  - 400 BAD_REQUEST
+                  - 401 UNAUTHORIZED
+                  - 402 PAYMENT_REQUIRED
+                  - 403 FORBIDDEN
+                  - 404 NOT_FOUND
+                  - 405 METHOD_NOT_ALLOWED
+                  - 406 NOT_ACCEPTABLE
+                  - 407 PROXY_AUTHENTICATION_REQUIRED
+                  - 408 REQUEST_TIMEOUT
+                  - 409 CONFLICT
+                  - 410 GONE
+                  - 411 LENGTH_REQUIRED
+                  - 412 PRECONDITION_FAILED
+                  - 413 PAYLOAD_TOO_LARGE
+                  - 413 REQUEST_ENTITY_TOO_LARGE
+                  - 414 URI_TOO_LONG
+                  - 414 REQUEST_URI_TOO_LONG
+                  - 415 UNSUPPORTED_MEDIA_TYPE
+                  - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+                  - 417 EXPECTATION_FAILED
+                  - 418 I_AM_A_TEAPOT
+                  - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+                  - 420 METHOD_FAILURE
+                  - 421 DESTINATION_LOCKED
+                  - 422 UNPROCESSABLE_ENTITY
+                  - 423 LOCKED
+                  - 424 FAILED_DEPENDENCY
+                  - 425 TOO_EARLY
+                  - 426 UPGRADE_REQUIRED
+                  - 428 PRECONDITION_REQUIRED
+                  - 429 TOO_MANY_REQUESTS
+                  - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+                  - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+                  - 500 INTERNAL_SERVER_ERROR
+                  - 501 NOT_IMPLEMENTED
+                  - 502 BAD_GATEWAY
+                  - 503 SERVICE_UNAVAILABLE
+                  - 504 GATEWAY_TIMEOUT
+                  - 505 HTTP_VERSION_NOT_SUPPORTED
+                  - 506 VARIANT_ALSO_NEGOTIATES
+                  - 507 INSUFFICIENT_STORAGE
+                  - 508 LOOP_DETECTED
+                  - 509 BANDWIDTH_LIMIT_EXCEEDED
+                  - 510 NOT_EXTENDED
+                  - 511 NETWORK_AUTHENTICATION_REQUIRED
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/percentages/{id}":
+    get:
+      tags:
+        - percentage-controller
+      summary: Get a percentage by id
+      operationId: getPercentagesById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Percentage"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    put:
+      tags:
+        - percentage-controller
+      summary: Update a percentage by id
+      operationId: updatePercentage
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Percentage"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Percentage"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    delete:
+      tags:
+        - percentage-controller
+      summary: Delete a percentage by id
+      operationId: deletePercentage
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: string
+                enum:
+                  - 100 CONTINUE
+                  - 101 SWITCHING_PROTOCOLS
+                  - 102 PROCESSING
+                  - 103 CHECKPOINT
+                  - 200 OK
+                  - 201 CREATED
+                  - 202 ACCEPTED
+                  - 203 NON_AUTHORITATIVE_INFORMATION
+                  - 204 NO_CONTENT
+                  - 205 RESET_CONTENT
+                  - 206 PARTIAL_CONTENT
+                  - 207 MULTI_STATUS
+                  - 208 ALREADY_REPORTED
+                  - 226 IM_USED
+                  - 300 MULTIPLE_CHOICES
+                  - 301 MOVED_PERMANENTLY
+                  - 302 FOUND
+                  - 302 MOVED_TEMPORARILY
+                  - 303 SEE_OTHER
+                  - 304 NOT_MODIFIED
+                  - 305 USE_PROXY
+                  - 307 TEMPORARY_REDIRECT
+                  - 308 PERMANENT_REDIRECT
+                  - 400 BAD_REQUEST
+                  - 401 UNAUTHORIZED
+                  - 402 PAYMENT_REQUIRED
+                  - 403 FORBIDDEN
+                  - 404 NOT_FOUND
+                  - 405 METHOD_NOT_ALLOWED
+                  - 406 NOT_ACCEPTABLE
+                  - 407 PROXY_AUTHENTICATION_REQUIRED
+                  - 408 REQUEST_TIMEOUT
+                  - 409 CONFLICT
+                  - 410 GONE
+                  - 411 LENGTH_REQUIRED
+                  - 412 PRECONDITION_FAILED
+                  - 413 PAYLOAD_TOO_LARGE
+                  - 413 REQUEST_ENTITY_TOO_LARGE
+                  - 414 URI_TOO_LONG
+                  - 414 REQUEST_URI_TOO_LONG
+                  - 415 UNSUPPORTED_MEDIA_TYPE
+                  - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+                  - 417 EXPECTATION_FAILED
+                  - 418 I_AM_A_TEAPOT
+                  - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+                  - 420 METHOD_FAILURE
+                  - 421 DESTINATION_LOCKED
+                  - 422 UNPROCESSABLE_ENTITY
+                  - 423 LOCKED
+                  - 424 FAILED_DEPENDENCY
+                  - 425 TOO_EARLY
+                  - 426 UPGRADE_REQUIRED
+                  - 428 PRECONDITION_REQUIRED
+                  - 429 TOO_MANY_REQUESTS
+                  - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+                  - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+                  - 500 INTERNAL_SERVER_ERROR
+                  - 501 NOT_IMPLEMENTED
+                  - 502 BAD_GATEWAY
+                  - 503 SERVICE_UNAVAILABLE
+                  - 504 GATEWAY_TIMEOUT
+                  - 505 HTTP_VERSION_NOT_SUPPORTED
+                  - 506 VARIANT_ALSO_NEGOTIATES
+                  - 507 INSUFFICIENT_STORAGE
+                  - 508 LOOP_DETECTED
+                  - 509 BANDWIDTH_LIMIT_EXCEEDED
+                  - 510 NOT_EXTENDED
+                  - 511 NETWORK_AUTHENTICATION_REQUIRED
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/means/{sectionId}/{studentId}":
+    put:
+      tags:
+        - mean-controller
+      summary: Update a mean by studentId
+      operationId: updateMean
+      parameters:
+        - name: sectionId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Mean"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Mean"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/honor/{studentID}/{degree}":
+    get:
+      tags:
+        - honor-controller
+      summary: Get a honor by studentId its id
+      operationId: getHonorByStudentIdAndDegree
+      parameters:
+        - name: studentID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: degree
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Honor"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    put:
+      tags:
+        - honor-controller
+      summary: Update a honors by studentId
+      operationId: updateHonor
+      parameters:
+        - name: studentID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: degree
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Honor"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Honor"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    delete:
+      tags:
+        - honor-controller
+      summary: Delete a honors by studentId
+      operationId: deleteHonor
+      parameters:
+        - name: studentID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: degree
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: string
+                enum:
+                  - 100 CONTINUE
+                  - 101 SWITCHING_PROTOCOLS
+                  - 102 PROCESSING
+                  - 103 CHECKPOINT
+                  - 200 OK
+                  - 201 CREATED
+                  - 202 ACCEPTED
+                  - 203 NON_AUTHORITATIVE_INFORMATION
+                  - 204 NO_CONTENT
+                  - 205 RESET_CONTENT
+                  - 206 PARTIAL_CONTENT
+                  - 207 MULTI_STATUS
+                  - 208 ALREADY_REPORTED
+                  - 226 IM_USED
+                  - 300 MULTIPLE_CHOICES
+                  - 301 MOVED_PERMANENTLY
+                  - 302 FOUND
+                  - 302 MOVED_TEMPORARILY
+                  - 303 SEE_OTHER
+                  - 304 NOT_MODIFIED
+                  - 305 USE_PROXY
+                  - 307 TEMPORARY_REDIRECT
+                  - 308 PERMANENT_REDIRECT
+                  - 400 BAD_REQUEST
+                  - 401 UNAUTHORIZED
+                  - 402 PAYMENT_REQUIRED
+                  - 403 FORBIDDEN
+                  - 404 NOT_FOUND
+                  - 405 METHOD_NOT_ALLOWED
+                  - 406 NOT_ACCEPTABLE
+                  - 407 PROXY_AUTHENTICATION_REQUIRED
+                  - 408 REQUEST_TIMEOUT
+                  - 409 CONFLICT
+                  - 410 GONE
+                  - 411 LENGTH_REQUIRED
+                  - 412 PRECONDITION_FAILED
+                  - 413 PAYLOAD_TOO_LARGE
+                  - 413 REQUEST_ENTITY_TOO_LARGE
+                  - 414 URI_TOO_LONG
+                  - 414 REQUEST_URI_TOO_LONG
+                  - 415 UNSUPPORTED_MEDIA_TYPE
+                  - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+                  - 417 EXPECTATION_FAILED
+                  - 418 I_AM_A_TEAPOT
+                  - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+                  - 420 METHOD_FAILURE
+                  - 421 DESTINATION_LOCKED
+                  - 422 UNPROCESSABLE_ENTITY
+                  - 423 LOCKED
+                  - 424 FAILED_DEPENDENCY
+                  - 425 TOO_EARLY
+                  - 426 UPGRADE_REQUIRED
+                  - 428 PRECONDITION_REQUIRED
+                  - 429 TOO_MANY_REQUESTS
+                  - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+                  - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+                  - 500 INTERNAL_SERVER_ERROR
+                  - 501 NOT_IMPLEMENTED
+                  - 502 BAD_GATEWAY
+                  - 503 SERVICE_UNAVAILABLE
+                  - 504 GATEWAY_TIMEOUT
+                  - 505 HTTP_VERSION_NOT_SUPPORTED
+                  - 506 VARIANT_ALSO_NEGOTIATES
+                  - 507 INSUFFICIENT_STORAGE
+                  - 508 LOOP_DETECTED
+                  - 509 BANDWIDTH_LIMIT_EXCEEDED
+                  - 510 NOT_EXTENDED
+                  - 511 NETWORK_AUTHENTICATION_REQUIRED
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/grade/{id}":
+    get:
+      tags:
+        - grade-table-controller
+      summary: Get a grade by its id
+      operationId: getgradeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/GradeTable"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    put:
+      tags:
+        - grade-table-controller
+      summary: Update a grade by its id
+      operationId: updateGradeTable
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/GradeTable"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/GradeTable"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    delete:
+      tags:
+        - grade-table-controller
+      summary: Delete a grade by its id
+      operationId: deleteGradeTable
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: string
+                enum:
+                  - 100 CONTINUE
+                  - 101 SWITCHING_PROTOCOLS
+                  - 102 PROCESSING
+                  - 103 CHECKPOINT
+                  - 200 OK
+                  - 201 CREATED
+                  - 202 ACCEPTED
+                  - 203 NON_AUTHORITATIVE_INFORMATION
+                  - 204 NO_CONTENT
+                  - 205 RESET_CONTENT
+                  - 206 PARTIAL_CONTENT
+                  - 207 MULTI_STATUS
+                  - 208 ALREADY_REPORTED
+                  - 226 IM_USED
+                  - 300 MULTIPLE_CHOICES
+                  - 301 MOVED_PERMANENTLY
+                  - 302 FOUND
+                  - 302 MOVED_TEMPORARILY
+                  - 303 SEE_OTHER
+                  - 304 NOT_MODIFIED
+                  - 305 USE_PROXY
+                  - 307 TEMPORARY_REDIRECT
+                  - 308 PERMANENT_REDIRECT
+                  - 400 BAD_REQUEST
+                  - 401 UNAUTHORIZED
+                  - 402 PAYMENT_REQUIRED
+                  - 403 FORBIDDEN
+                  - 404 NOT_FOUND
+                  - 405 METHOD_NOT_ALLOWED
+                  - 406 NOT_ACCEPTABLE
+                  - 407 PROXY_AUTHENTICATION_REQUIRED
+                  - 408 REQUEST_TIMEOUT
+                  - 409 CONFLICT
+                  - 410 GONE
+                  - 411 LENGTH_REQUIRED
+                  - 412 PRECONDITION_FAILED
+                  - 413 PAYLOAD_TOO_LARGE
+                  - 413 REQUEST_ENTITY_TOO_LARGE
+                  - 414 URI_TOO_LONG
+                  - 414 REQUEST_URI_TOO_LONG
+                  - 415 UNSUPPORTED_MEDIA_TYPE
+                  - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+                  - 417 EXPECTATION_FAILED
+                  - 418 I_AM_A_TEAPOT
+                  - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+                  - 420 METHOD_FAILURE
+                  - 421 DESTINATION_LOCKED
+                  - 422 UNPROCESSABLE_ENTITY
+                  - 423 LOCKED
+                  - 424 FAILED_DEPENDENCY
+                  - 425 TOO_EARLY
+                  - 426 UPGRADE_REQUIRED
+                  - 428 PRECONDITION_REQUIRED
+                  - 429 TOO_MANY_REQUESTS
+                  - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+                  - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+                  - 500 INTERNAL_SERVER_ERROR
+                  - 501 NOT_IMPLEMENTED
+                  - 502 BAD_GATEWAY
+                  - 503 SERVICE_UNAVAILABLE
+                  - 504 GATEWAY_TIMEOUT
+                  - 505 HTTP_VERSION_NOT_SUPPORTED
+                  - 506 VARIANT_ALSO_NEGOTIATES
+                  - 507 INSUFFICIENT_STORAGE
+                  - 508 LOOP_DETECTED
+                  - 509 BANDWIDTH_LIMIT_EXCEEDED
+                  - 510 NOT_EXTENDED
+                  - 511 NETWORK_AUTHENTICATION_REQUIRED
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/grade/{courseID}/{studentID}/{SchoolYear}/{semester}":
+    put:
+      tags:
+        - grade-table-controller
+      summary:
+        Update a grade by courseId, studentId, schoolYear and semester to assign
+        a grade to a student in a course
+      operationId: updateGrade
+      parameters:
+        - name: courseID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: studentID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: SchoolYear
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: semester
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/GradeTable"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/GradeTable"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/courses/{id}":
+    get:
+      tags:
+        - course-controller
+      summary: Get a course by its id
+      operationId: getCourseById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Course"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    put:
+      tags:
+        - course-controller
+      summary: Update a course by its id
+      operationId: updateCourse
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Course"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Course"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    delete:
+      tags:
+        - course-controller
+      summary: Delete a course by its id
+      operationId: deleteCourseById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: string
+                enum:
+                  - 100 CONTINUE
+                  - 101 SWITCHING_PROTOCOLS
+                  - 102 PROCESSING
+                  - 103 CHECKPOINT
+                  - 200 OK
+                  - 201 CREATED
+                  - 202 ACCEPTED
+                  - 203 NON_AUTHORITATIVE_INFORMATION
+                  - 204 NO_CONTENT
+                  - 205 RESET_CONTENT
+                  - 206 PARTIAL_CONTENT
+                  - 207 MULTI_STATUS
+                  - 208 ALREADY_REPORTED
+                  - 226 IM_USED
+                  - 300 MULTIPLE_CHOICES
+                  - 301 MOVED_PERMANENTLY
+                  - 302 FOUND
+                  - 302 MOVED_TEMPORARILY
+                  - 303 SEE_OTHER
+                  - 304 NOT_MODIFIED
+                  - 305 USE_PROXY
+                  - 307 TEMPORARY_REDIRECT
+                  - 308 PERMANENT_REDIRECT
+                  - 400 BAD_REQUEST
+                  - 401 UNAUTHORIZED
+                  - 402 PAYMENT_REQUIRED
+                  - 403 FORBIDDEN
+                  - 404 NOT_FOUND
+                  - 405 METHOD_NOT_ALLOWED
+                  - 406 NOT_ACCEPTABLE
+                  - 407 PROXY_AUTHENTICATION_REQUIRED
+                  - 408 REQUEST_TIMEOUT
+                  - 409 CONFLICT
+                  - 410 GONE
+                  - 411 LENGTH_REQUIRED
+                  - 412 PRECONDITION_FAILED
+                  - 413 PAYLOAD_TOO_LARGE
+                  - 413 REQUEST_ENTITY_TOO_LARGE
+                  - 414 URI_TOO_LONG
+                  - 414 REQUEST_URI_TOO_LONG
+                  - 415 UNSUPPORTED_MEDIA_TYPE
+                  - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+                  - 417 EXPECTATION_FAILED
+                  - 418 I_AM_A_TEAPOT
+                  - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+                  - 420 METHOD_FAILURE
+                  - 421 DESTINATION_LOCKED
+                  - 422 UNPROCESSABLE_ENTITY
+                  - 423 LOCKED
+                  - 424 FAILED_DEPENDENCY
+                  - 425 TOO_EARLY
+                  - 426 UPGRADE_REQUIRED
+                  - 428 PRECONDITION_REQUIRED
+                  - 429 TOO_MANY_REQUESTS
+                  - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+                  - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+                  - 500 INTERNAL_SERVER_ERROR
+                  - 501 NOT_IMPLEMENTED
+                  - 502 BAD_GATEWAY
+                  - 503 SERVICE_UNAVAILABLE
+                  - 504 GATEWAY_TIMEOUT
+                  - 505 HTTP_VERSION_NOT_SUPPORTED
+                  - 506 VARIANT_ALSO_NEGOTIATES
+                  - 507 INSUFFICIENT_STORAGE
+                  - 508 LOOP_DETECTED
+                  - 509 BANDWIDTH_LIMIT_EXCEEDED
+                  - 510 NOT_EXTENDED
+                  - 511 NETWORK_AUTHENTICATION_REQUIRED
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/teachers":
+    get:
+      tags:
+        - teacher-controller
+      summary: Get all teacher
+      operationId: getAllTeachers
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Teacher"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    post:
+      tags:
+        - teacher-controller
+      summary: Create a new teacher
+      operationId: createTeachers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Teacher"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Teacher"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/students":
+    get:
+      tags:
+        - student-controller
+      summary: Get all students
+      operationId: getAllStudents
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Student"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    post:
+      tags:
+        - student-controller
+      summary: Create a new student
+      operationId: createStudent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Student"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Student"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    delete:
+      tags:
+        - student-controller
+      summary: Delete all students
+      operationId: deleteAllStudents
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: string
+                enum:
+                  - 100 CONTINUE
+                  - 101 SWITCHING_PROTOCOLS
+                  - 102 PROCESSING
+                  - 103 CHECKPOINT
+                  - 200 OK
+                  - 201 CREATED
+                  - 202 ACCEPTED
+                  - 203 NON_AUTHORITATIVE_INFORMATION
+                  - 204 NO_CONTENT
+                  - 205 RESET_CONTENT
+                  - 206 PARTIAL_CONTENT
+                  - 207 MULTI_STATUS
+                  - 208 ALREADY_REPORTED
+                  - 226 IM_USED
+                  - 300 MULTIPLE_CHOICES
+                  - 301 MOVED_PERMANENTLY
+                  - 302 FOUND
+                  - 302 MOVED_TEMPORARILY
+                  - 303 SEE_OTHER
+                  - 304 NOT_MODIFIED
+                  - 305 USE_PROXY
+                  - 307 TEMPORARY_REDIRECT
+                  - 308 PERMANENT_REDIRECT
+                  - 400 BAD_REQUEST
+                  - 401 UNAUTHORIZED
+                  - 402 PAYMENT_REQUIRED
+                  - 403 FORBIDDEN
+                  - 404 NOT_FOUND
+                  - 405 METHOD_NOT_ALLOWED
+                  - 406 NOT_ACCEPTABLE
+                  - 407 PROXY_AUTHENTICATION_REQUIRED
+                  - 408 REQUEST_TIMEOUT
+                  - 409 CONFLICT
+                  - 410 GONE
+                  - 411 LENGTH_REQUIRED
+                  - 412 PRECONDITION_FAILED
+                  - 413 PAYLOAD_TOO_LARGE
+                  - 413 REQUEST_ENTITY_TOO_LARGE
+                  - 414 URI_TOO_LONG
+                  - 414 REQUEST_URI_TOO_LONG
+                  - 415 UNSUPPORTED_MEDIA_TYPE
+                  - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+                  - 417 EXPECTATION_FAILED
+                  - 418 I_AM_A_TEAPOT
+                  - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+                  - 420 METHOD_FAILURE
+                  - 421 DESTINATION_LOCKED
+                  - 422 UNPROCESSABLE_ENTITY
+                  - 423 LOCKED
+                  - 424 FAILED_DEPENDENCY
+                  - 425 TOO_EARLY
+                  - 426 UPGRADE_REQUIRED
+                  - 428 PRECONDITION_REQUIRED
+                  - 429 TOO_MANY_REQUESTS
+                  - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+                  - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+                  - 500 INTERNAL_SERVER_ERROR
+                  - 501 NOT_IMPLEMENTED
+                  - 502 BAD_GATEWAY
+                  - 503 SERVICE_UNAVAILABLE
+                  - 504 GATEWAY_TIMEOUT
+                  - 505 HTTP_VERSION_NOT_SUPPORTED
+                  - 506 VARIANT_ALSO_NEGOTIATES
+                  - 507 INSUFFICIENT_STORAGE
+                  - 508 LOOP_DETECTED
+                  - 509 BANDWIDTH_LIMIT_EXCEEDED
+                  - 510 NOT_EXTENDED
+                  - 511 NETWORK_AUTHENTICATION_REQUIRED
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/sections":
+    get:
+      tags:
+        - section-controller
+      summary: Get all sections
+      operationId: getAllSections
+      parameters:
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Section"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    post:
+      tags:
+        - section-controller
+      summary: Create a new section
+      operationId: createSection
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Section"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Section"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    delete:
+      tags:
+        - section-controller
+      summary: Delete all sections
+      operationId: deleteAllSections
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: string
+                enum:
+                  - 100 CONTINUE
+                  - 101 SWITCHING_PROTOCOLS
+                  - 102 PROCESSING
+                  - 103 CHECKPOINT
+                  - 200 OK
+                  - 201 CREATED
+                  - 202 ACCEPTED
+                  - 203 NON_AUTHORITATIVE_INFORMATION
+                  - 204 NO_CONTENT
+                  - 205 RESET_CONTENT
+                  - 206 PARTIAL_CONTENT
+                  - 207 MULTI_STATUS
+                  - 208 ALREADY_REPORTED
+                  - 226 IM_USED
+                  - 300 MULTIPLE_CHOICES
+                  - 301 MOVED_PERMANENTLY
+                  - 302 FOUND
+                  - 302 MOVED_TEMPORARILY
+                  - 303 SEE_OTHER
+                  - 304 NOT_MODIFIED
+                  - 305 USE_PROXY
+                  - 307 TEMPORARY_REDIRECT
+                  - 308 PERMANENT_REDIRECT
+                  - 400 BAD_REQUEST
+                  - 401 UNAUTHORIZED
+                  - 402 PAYMENT_REQUIRED
+                  - 403 FORBIDDEN
+                  - 404 NOT_FOUND
+                  - 405 METHOD_NOT_ALLOWED
+                  - 406 NOT_ACCEPTABLE
+                  - 407 PROXY_AUTHENTICATION_REQUIRED
+                  - 408 REQUEST_TIMEOUT
+                  - 409 CONFLICT
+                  - 410 GONE
+                  - 411 LENGTH_REQUIRED
+                  - 412 PRECONDITION_FAILED
+                  - 413 PAYLOAD_TOO_LARGE
+                  - 413 REQUEST_ENTITY_TOO_LARGE
+                  - 414 URI_TOO_LONG
+                  - 414 REQUEST_URI_TOO_LONG
+                  - 415 UNSUPPORTED_MEDIA_TYPE
+                  - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+                  - 417 EXPECTATION_FAILED
+                  - 418 I_AM_A_TEAPOT
+                  - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+                  - 420 METHOD_FAILURE
+                  - 421 DESTINATION_LOCKED
+                  - 422 UNPROCESSABLE_ENTITY
+                  - 423 LOCKED
+                  - 424 FAILED_DEPENDENCY
+                  - 425 TOO_EARLY
+                  - 426 UPGRADE_REQUIRED
+                  - 428 PRECONDITION_REQUIRED
+                  - 429 TOO_MANY_REQUESTS
+                  - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+                  - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+                  - 500 INTERNAL_SERVER_ERROR
+                  - 501 NOT_IMPLEMENTED
+                  - 502 BAD_GATEWAY
+                  - 503 SERVICE_UNAVAILABLE
+                  - 504 GATEWAY_TIMEOUT
+                  - 505 HTTP_VERSION_NOT_SUPPORTED
+                  - 506 VARIANT_ALSO_NEGOTIATES
+                  - 507 INSUFFICIENT_STORAGE
+                  - 508 LOOP_DETECTED
+                  - 509 BANDWIDTH_LIMIT_EXCEEDED
+                  - 510 NOT_EXTENDED
+                  - 511 NETWORK_AUTHENTICATION_REQUIRED
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/sections/{sectionId}/students/{studentId}/means":
+    get:
+      tags:
+        - mean-controller
+      summary: Get a mean by sectionsId and studentId
+      operationId: getAllMeansBystudentIdAndsectionId
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: sectionId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Mean"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    post:
+      tags:
+        - mean-controller
+      summary: Create a mean by sectionId and studentId
+      operationId: createMean
+      parameters:
+        - name: sectionId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Mean"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Mean"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/sections/{sectionId}/courses/{courseId}/percentages":
+    get:
+      tags:
+        - percentage-controller
+      summary: Get a percentage by secctionId and courseId
+      operationId: getAllPercentagesByCourseIdAndsectionId
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: sectionId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Percentage"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    post:
+      tags:
+        - percentage-controller
+      summary: Create a percentage related to a sectionId and a courseId
+      operationId: createPercentage
+      parameters:
+        - name: sectionId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Percentage"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Percentage"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/honor":
+    get:
+      tags:
+        - honor-controller
+      summary: Get all honors
+      operationId: getAllHonors
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Honor"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    post:
+      tags:
+        - honor-controller
+      summary: Create a honor
+      operationId: createHonor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Honor"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Honor"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    delete:
+      tags:
+        - honor-controller
+      summary: Delete all honors
+      operationId: deleteAllHonors
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: string
+                enum:
+                  - 100 CONTINUE
+                  - 101 SWITCHING_PROTOCOLS
+                  - 102 PROCESSING
+                  - 103 CHECKPOINT
+                  - 200 OK
+                  - 201 CREATED
+                  - 202 ACCEPTED
+                  - 203 NON_AUTHORITATIVE_INFORMATION
+                  - 204 NO_CONTENT
+                  - 205 RESET_CONTENT
+                  - 206 PARTIAL_CONTENT
+                  - 207 MULTI_STATUS
+                  - 208 ALREADY_REPORTED
+                  - 226 IM_USED
+                  - 300 MULTIPLE_CHOICES
+                  - 301 MOVED_PERMANENTLY
+                  - 302 FOUND
+                  - 302 MOVED_TEMPORARILY
+                  - 303 SEE_OTHER
+                  - 304 NOT_MODIFIED
+                  - 305 USE_PROXY
+                  - 307 TEMPORARY_REDIRECT
+                  - 308 PERMANENT_REDIRECT
+                  - 400 BAD_REQUEST
+                  - 401 UNAUTHORIZED
+                  - 402 PAYMENT_REQUIRED
+                  - 403 FORBIDDEN
+                  - 404 NOT_FOUND
+                  - 405 METHOD_NOT_ALLOWED
+                  - 406 NOT_ACCEPTABLE
+                  - 407 PROXY_AUTHENTICATION_REQUIRED
+                  - 408 REQUEST_TIMEOUT
+                  - 409 CONFLICT
+                  - 410 GONE
+                  - 411 LENGTH_REQUIRED
+                  - 412 PRECONDITION_FAILED
+                  - 413 PAYLOAD_TOO_LARGE
+                  - 413 REQUEST_ENTITY_TOO_LARGE
+                  - 414 URI_TOO_LONG
+                  - 414 REQUEST_URI_TOO_LONG
+                  - 415 UNSUPPORTED_MEDIA_TYPE
+                  - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+                  - 417 EXPECTATION_FAILED
+                  - 418 I_AM_A_TEAPOT
+                  - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+                  - 420 METHOD_FAILURE
+                  - 421 DESTINATION_LOCKED
+                  - 422 UNPROCESSABLE_ENTITY
+                  - 423 LOCKED
+                  - 424 FAILED_DEPENDENCY
+                  - 425 TOO_EARLY
+                  - 426 UPGRADE_REQUIRED
+                  - 428 PRECONDITION_REQUIRED
+                  - 429 TOO_MANY_REQUESTS
+                  - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+                  - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+                  - 500 INTERNAL_SERVER_ERROR
+                  - 501 NOT_IMPLEMENTED
+                  - 502 BAD_GATEWAY
+                  - 503 SERVICE_UNAVAILABLE
+                  - 504 GATEWAY_TIMEOUT
+                  - 505 HTTP_VERSION_NOT_SUPPORTED
+                  - 506 VARIANT_ALSO_NEGOTIATES
+                  - 507 INSUFFICIENT_STORAGE
+                  - 508 LOOP_DETECTED
+                  - 509 BANDWIDTH_LIMIT_EXCEEDED
+                  - 510 NOT_EXTENDED
+                  - 511 NETWORK_AUTHENTICATION_REQUIRED
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/courses":
+    get:
+      tags:
+        - course-controller
+      summary: Get all courses
+      operationId: getAllCourses
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Course"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    post:
+      tags:
+        - course-controller
+      summary: Create a new course
+      operationId: createCourse
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Course"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Course"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    delete:
+      tags:
+        - course-controller
+      summary: Delete all courses
+      operationId: deleteAllCourses
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: string
+                enum:
+                  - 100 CONTINUE
+                  - 101 SWITCHING_PROTOCOLS
+                  - 102 PROCESSING
+                  - 103 CHECKPOINT
+                  - 200 OK
+                  - 201 CREATED
+                  - 202 ACCEPTED
+                  - 203 NON_AUTHORITATIVE_INFORMATION
+                  - 204 NO_CONTENT
+                  - 205 RESET_CONTENT
+                  - 206 PARTIAL_CONTENT
+                  - 207 MULTI_STATUS
+                  - 208 ALREADY_REPORTED
+                  - 226 IM_USED
+                  - 300 MULTIPLE_CHOICES
+                  - 301 MOVED_PERMANENTLY
+                  - 302 FOUND
+                  - 302 MOVED_TEMPORARILY
+                  - 303 SEE_OTHER
+                  - 304 NOT_MODIFIED
+                  - 305 USE_PROXY
+                  - 307 TEMPORARY_REDIRECT
+                  - 308 PERMANENT_REDIRECT
+                  - 400 BAD_REQUEST
+                  - 401 UNAUTHORIZED
+                  - 402 PAYMENT_REQUIRED
+                  - 403 FORBIDDEN
+                  - 404 NOT_FOUND
+                  - 405 METHOD_NOT_ALLOWED
+                  - 406 NOT_ACCEPTABLE
+                  - 407 PROXY_AUTHENTICATION_REQUIRED
+                  - 408 REQUEST_TIMEOUT
+                  - 409 CONFLICT
+                  - 410 GONE
+                  - 411 LENGTH_REQUIRED
+                  - 412 PRECONDITION_FAILED
+                  - 413 PAYLOAD_TOO_LARGE
+                  - 413 REQUEST_ENTITY_TOO_LARGE
+                  - 414 URI_TOO_LONG
+                  - 414 REQUEST_URI_TOO_LONG
+                  - 415 UNSUPPORTED_MEDIA_TYPE
+                  - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+                  - 417 EXPECTATION_FAILED
+                  - 418 I_AM_A_TEAPOT
+                  - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+                  - 420 METHOD_FAILURE
+                  - 421 DESTINATION_LOCKED
+                  - 422 UNPROCESSABLE_ENTITY
+                  - 423 LOCKED
+                  - 424 FAILED_DEPENDENCY
+                  - 425 TOO_EARLY
+                  - 426 UPGRADE_REQUIRED
+                  - 428 PRECONDITION_REQUIRED
+                  - 429 TOO_MANY_REQUESTS
+                  - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+                  - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+                  - 500 INTERNAL_SERVER_ERROR
+                  - 501 NOT_IMPLEMENTED
+                  - 502 BAD_GATEWAY
+                  - 503 SERVICE_UNAVAILABLE
+                  - 504 GATEWAY_TIMEOUT
+                  - 505 HTTP_VERSION_NOT_SUPPORTED
+                  - 506 VARIANT_ALSO_NEGOTIATES
+                  - 507 INSUFFICIENT_STORAGE
+                  - 508 LOOP_DETECTED
+                  - 509 BANDWIDTH_LIMIT_EXCEEDED
+                  - 510 NOT_EXTENDED
+                  - 511 NETWORK_AUTHENTICATION_REQUIRED
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/courses/{courseId}/teachers":
+    post:
+      tags:
+        - teacher-controller
+      summary: Create a teacher linked to a course
+      operationId: addTeacherByCourse
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Teacher"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Teacher"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/courses/{courseId}/students/{studentId}/grade":
+    get:
+      tags:
+        - grade-table-controller
+      summary: Get a grade by courseId and studentId
+      operationId: getAllgradeBystudentIdAndCourseId
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/GradeTable"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    post:
+      tags:
+        - grade-table-controller
+      summary:
+        Create a grade, assign a null value to each variable to register a
+        student to a course
+      operationId: createGradeTable
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/GradeTable"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/GradeTable"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/students/{studentId}/means":
+    get:
+      tags:
+        - mean-controller
+      summary: Get a mean by studentId
+      operationId: getAllMeansBystudentId
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Mean"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/sections/{sectionId}/percentages":
+    get:
+      tags:
+        - percentage-controller
+      summary: Get percentages by a sectionId
+      operationId: getAllPercentagesBySectionId
+      parameters:
+        - name: sectionId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Percentage"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/sections/{sectionId}/means":
+    get:
+      tags:
+        - mean-controller
+      summary: Get a mean by sectionId
+      operationId: getAllMeansBysectionId
+      parameters:
+        - name: sectionId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Mean"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/percentages":
+    get:
+      tags:
+        - percentage-controller
+      summary: Get all percentages
+      operationId: getAllPercentages
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Percentage"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/means":
+    get:
+      tags:
+        - mean-controller
+      summary: Get all means
+      operationId: getAllMeans
+      parameters:
+        - name: mean
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: student
+          in: query
+          required: false
+          schema:
+            "$ref": "#/components/schemas/Student"
+        - name: section
+          in: query
+          required: false
+          schema:
+            "$ref": "#/components/schemas/Section"
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Mean"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/means/{id}":
+    get:
+      tags:
+        - mean-controller
+      summary: Get a mean by its id
+      operationId: getMeansById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Mean"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+    delete:
+      tags:
+        - mean-controller
+      summary: Delete a mean by id
+      operationId: deleteMean
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: string
+                enum:
+                  - 100 CONTINUE
+                  - 101 SWITCHING_PROTOCOLS
+                  - 102 PROCESSING
+                  - 103 CHECKPOINT
+                  - 200 OK
+                  - 201 CREATED
+                  - 202 ACCEPTED
+                  - 203 NON_AUTHORITATIVE_INFORMATION
+                  - 204 NO_CONTENT
+                  - 205 RESET_CONTENT
+                  - 206 PARTIAL_CONTENT
+                  - 207 MULTI_STATUS
+                  - 208 ALREADY_REPORTED
+                  - 226 IM_USED
+                  - 300 MULTIPLE_CHOICES
+                  - 301 MOVED_PERMANENTLY
+                  - 302 FOUND
+                  - 302 MOVED_TEMPORARILY
+                  - 303 SEE_OTHER
+                  - 304 NOT_MODIFIED
+                  - 305 USE_PROXY
+                  - 307 TEMPORARY_REDIRECT
+                  - 308 PERMANENT_REDIRECT
+                  - 400 BAD_REQUEST
+                  - 401 UNAUTHORIZED
+                  - 402 PAYMENT_REQUIRED
+                  - 403 FORBIDDEN
+                  - 404 NOT_FOUND
+                  - 405 METHOD_NOT_ALLOWED
+                  - 406 NOT_ACCEPTABLE
+                  - 407 PROXY_AUTHENTICATION_REQUIRED
+                  - 408 REQUEST_TIMEOUT
+                  - 409 CONFLICT
+                  - 410 GONE
+                  - 411 LENGTH_REQUIRED
+                  - 412 PRECONDITION_FAILED
+                  - 413 PAYLOAD_TOO_LARGE
+                  - 413 REQUEST_ENTITY_TOO_LARGE
+                  - 414 URI_TOO_LONG
+                  - 414 REQUEST_URI_TOO_LONG
+                  - 415 UNSUPPORTED_MEDIA_TYPE
+                  - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+                  - 417 EXPECTATION_FAILED
+                  - 418 I_AM_A_TEAPOT
+                  - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+                  - 420 METHOD_FAILURE
+                  - 421 DESTINATION_LOCKED
+                  - 422 UNPROCESSABLE_ENTITY
+                  - 423 LOCKED
+                  - 424 FAILED_DEPENDENCY
+                  - 425 TOO_EARLY
+                  - 426 UPGRADE_REQUIRED
+                  - 428 PRECONDITION_REQUIRED
+                  - 429 TOO_MANY_REQUESTS
+                  - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+                  - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+                  - 500 INTERNAL_SERVER_ERROR
+                  - 501 NOT_IMPLEMENTED
+                  - 502 BAD_GATEWAY
+                  - 503 SERVICE_UNAVAILABLE
+                  - 504 GATEWAY_TIMEOUT
+                  - 505 HTTP_VERSION_NOT_SUPPORTED
+                  - 506 VARIANT_ALSO_NEGOTIATES
+                  - 507 INSUFFICIENT_STORAGE
+                  - 508 LOOP_DETECTED
+                  - 509 BANDWIDTH_LIMIT_EXCEEDED
+                  - 510 NOT_EXTENDED
+                  - 511 NETWORK_AUTHENTICATION_REQUIRED
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/grade":
+    get:
+      tags:
+        - grade-table-controller
+      summary: Get all grades
+      operationId: getAllGrades
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/GradeTable"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/courses/{courseId}/percentages":
+    get:
+      tags:
+        - percentage-controller
+      summary: Get percentages by courseId
+      operationId: getAllPercentagesByCourseId
+      parameters:
+        - name: CourseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Percentage"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/sections/{sectionsId}/students/{studentId}/means":
+    delete:
+      tags:
+        - mean-controller
+      summary: Delete a mean by sectionId and studentId
+      operationId: deleteMeanOfstudentInSection
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: sectionId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Mean"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/sections/{sectionsId}/courses/{courseId}/percentages":
+    delete:
+      tags:
+        - percentage-controller
+      summary: Get a percentage by sectionId and courseId
+      operationId: deletePercentagesByCourseAndSection
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: sectionId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Percentage"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/courses/{coursesId}/students/{studentId}/grade":
+    delete:
+      tags:
+        - grade-table-controller
+      summary: Delete a grade by courseId and studentId
+      operationId: deleteGradeTableByCourseIdAndStudentId
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/GradeTable"
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+  "/api/courses/{courseId}/teachers/{teacherId}":
+    delete:
+      tags:
+        - teacher-controller
+      summary: delete a teacher from a course
+      operationId: deleteTeacherFromCourse
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: teacherId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: string
+                enum:
+                  - 100 CONTINUE
+                  - 101 SWITCHING_PROTOCOLS
+                  - 102 PROCESSING
+                  - 103 CHECKPOINT
+                  - 200 OK
+                  - 201 CREATED
+                  - 202 ACCEPTED
+                  - 203 NON_AUTHORITATIVE_INFORMATION
+                  - 204 NO_CONTENT
+                  - 205 RESET_CONTENT
+                  - 206 PARTIAL_CONTENT
+                  - 207 MULTI_STATUS
+                  - 208 ALREADY_REPORTED
+                  - 226 IM_USED
+                  - 300 MULTIPLE_CHOICES
+                  - 301 MOVED_PERMANENTLY
+                  - 302 FOUND
+                  - 302 MOVED_TEMPORARILY
+                  - 303 SEE_OTHER
+                  - 304 NOT_MODIFIED
+                  - 305 USE_PROXY
+                  - 307 TEMPORARY_REDIRECT
+                  - 308 PERMANENT_REDIRECT
+                  - 400 BAD_REQUEST
+                  - 401 UNAUTHORIZED
+                  - 402 PAYMENT_REQUIRED
+                  - 403 FORBIDDEN
+                  - 404 NOT_FOUND
+                  - 405 METHOD_NOT_ALLOWED
+                  - 406 NOT_ACCEPTABLE
+                  - 407 PROXY_AUTHENTICATION_REQUIRED
+                  - 408 REQUEST_TIMEOUT
+                  - 409 CONFLICT
+                  - 410 GONE
+                  - 411 LENGTH_REQUIRED
+                  - 412 PRECONDITION_FAILED
+                  - 413 PAYLOAD_TOO_LARGE
+                  - 413 REQUEST_ENTITY_TOO_LARGE
+                  - 414 URI_TOO_LONG
+                  - 414 REQUEST_URI_TOO_LONG
+                  - 415 UNSUPPORTED_MEDIA_TYPE
+                  - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+                  - 417 EXPECTATION_FAILED
+                  - 418 I_AM_A_TEAPOT
+                  - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+                  - 420 METHOD_FAILURE
+                  - 421 DESTINATION_LOCKED
+                  - 422 UNPROCESSABLE_ENTITY
+                  - 423 LOCKED
+                  - 424 FAILED_DEPENDENCY
+                  - 425 TOO_EARLY
+                  - 426 UPGRADE_REQUIRED
+                  - 428 PRECONDITION_REQUIRED
+                  - 429 TOO_MANY_REQUESTS
+                  - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+                  - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+                  - 500 INTERNAL_SERVER_ERROR
+                  - 501 NOT_IMPLEMENTED
+                  - 502 BAD_GATEWAY
+                  - 503 SERVICE_UNAVAILABLE
+                  - 504 GATEWAY_TIMEOUT
+                  - 505 HTTP_VERSION_NOT_SUPPORTED
+                  - 506 VARIANT_ALSO_NEGOTIATES
+                  - 507 INSUFFICIENT_STORAGE
+                  - 508 LOOP_DETECTED
+                  - 509 BANDWIDTH_LIMIT_EXCEEDED
+                  - 510 NOT_EXTENDED
+                  - 511 NETWORK_AUTHENTICATION_REQUIRED
+        "404":
+          description: Not Found
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorMessage"
+components:
+  schemas:
+    ErrorMessage:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+        timestamp:
+          type: string
+          format: date-time
+        message:
+          type: string
+        description:
+          type: string
+    Teacher:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    Course:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        semester:
+          type: string
+    Student:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    Section:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        credits:
+          type: integer
+          format: int32
+        level:
+          type: integer
+          format: int32
+    Percentage:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        percentage:
+          type: integer
+          format: int32
+        course:
+          "$ref": "#/components/schemas/Course"
+        section:
+          "$ref": "#/components/schemas/Section"
+    Mean:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        mean:
+          type: integer
+          format: int32
+        schoolYear:
+          type: integer
+          format: int32
+        student:
+          "$ref": "#/components/schemas/Student"
+        section:
+          "$ref": "#/components/schemas/Section"
+    Honor:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        honor:
+          type: string
+        grade:
+          type: number
+          format: double
+        degree:
+          type: string
+        student:
+          "$ref": "#/components/schemas/Student"
+    GradeTable:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        student:
+          "$ref": "#/components/schemas/Student"
+        course:
+          "$ref": "#/components/schemas/Course"
+        semester:
+          type: string
+        grade:
+          type: integer
+          format: int32
+        schoolYear:
+          type: integer
+          format: int32
+        comment:
+          type: string
+        comment_teacher:
+          type: string

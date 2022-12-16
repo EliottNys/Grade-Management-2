@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import GradeManagement.GradeManagement.model.Student;
 import GradeManagement.GradeManagement.service.StudentService;
+import io.swagger.v3.oas.annotations.Operation;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -25,31 +26,37 @@ public class StudentController {
     @Autowired
     StudentService studentService;
 
+    @Operation(summary = "Get all students")
     @GetMapping("/students")
     public ResponseEntity<List<Student>> getAllStudents() {
         return studentService.getAllStudents();
     }
 
+    @Operation(summary = "Get a student by id")
     @GetMapping("/students/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable("id") long id) {
         return studentService.getStudentById(id);
     }
 
+    @Operation(summary = "Create a new student")
     @PostMapping("/students")
     public ResponseEntity<Student> createStudent(@RequestBody Student student) {
         return studentService.createStudent(student);
     }
 
+    @Operation(summary = "Update a student by id")
     @PutMapping("/students/{id}")
     public ResponseEntity<Student> updateStudent(@PathVariable("id") long id, @RequestBody Student student) {
         return studentService.updateStudent(id,student);
     }
 
+    @Operation(summary = "Delete a student by id")
     @DeleteMapping("/students/{id}")
     public ResponseEntity<HttpStatus> deleteStudent(@PathVariable("id") long id) {
         return studentService.deleteStudent(id);
     }
 
+    @Operation(summary = "Delete all students")
     @DeleteMapping("/students")
     public ResponseEntity<HttpStatus> deleteAllStudents() {
         return studentService.deleteAllStudents();

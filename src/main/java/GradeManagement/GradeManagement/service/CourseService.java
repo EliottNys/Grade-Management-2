@@ -46,7 +46,6 @@ public class CourseService{
     /**
    * Get one course by its id
    * @param id The id of the desired course
-   * @param semester 
    * @return HTTP response (OK if successful, NO_CONTENT if not found, INTERNAL_SERVER_ERROR if error occur)
    */
 
