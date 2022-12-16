@@ -51,7 +51,18 @@ class CourseControllerTest {
     }
 
     @Test
-    void getCourseById() {
+    void getCourseById() throws Exception {
+        // given
+        Course course = new Course("Software Architecture");
+        courseRepository.save(course);
+
+        // when
+        ResultActions response = mockMvc.perform(get("/api/courses/{id}", course.getId()));
+
+        // then
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.name", is(course.getName())));
     }
 
     @Test
