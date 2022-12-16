@@ -2,11 +2,13 @@ package GradeManagement.GradeManagement.controller;
 
 import GradeManagement.GradeManagement.model.Course;
 import GradeManagement.GradeManagement.repository.CourseRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -15,6 +17,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -28,6 +31,9 @@ class CourseControllerTest {
 
     @Autowired
     private CourseRepository courseRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setup() { courseRepository.deleteAll(); }
@@ -80,7 +86,20 @@ class CourseControllerTest {
     }
 
     @Test
-    void createCourse() {
+    void createCourse() throws Exception {
+        // given
+        Course course = new Course("Software Architecture");
+
+        // when
+        ResultActions response = mockMvc.perform(post("/api/courses")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(course)));
+
+        // then
+        response.andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name",
+                        is(course.getName())));
     }
 
     @Test
