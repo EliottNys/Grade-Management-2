@@ -1,6 +1,7 @@
 package GradeManagement.GradeManagement.controller;
 
 import GradeManagement.GradeManagement.model.Course;
+import GradeManagement.GradeManagement.model.Student;
 import GradeManagement.GradeManagement.repository.CourseRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -125,7 +126,23 @@ class CourseControllerTest {
     }
 
     @Test
-    void deleteCourse() {
+    void deleteCourse() throws Exception {
+        // given
+        Course savedCourse = new Course("Software Architecture");
+        courseRepository.save(savedCourse);
+        courseRepository.save(new Course("Software Architecture and Quality Lab"));
+
+        // when
+        ResultActions response = mockMvc.perform(delete("/api/courses/{id}", savedCourse.getId()));
+        ResultActions get_response = mockMvc.perform(get("/api/courses"));
+
+        // then
+        response.andExpect(status().isNoContent())
+                .andDo(print());
+        get_response.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.size()",
+                        is(1)));
     }
 
     @Test
