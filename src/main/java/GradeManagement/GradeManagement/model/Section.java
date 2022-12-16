@@ -24,15 +24,6 @@ public class Section {
     @Column(name = "level")
     private Integer level;
 
-    // @ManyToMany(fetch = FetchType.LAZY,
-    // cascade = {
-    //         CascadeType.PERSIST,
-    //         CascadeType.MERGE
-    // },
-    // mappedBy = "sections")
-    // @JsonIgnore
-    // private Set<Course> courses = new HashSet<>();
-
     public Section(){
     }
 
