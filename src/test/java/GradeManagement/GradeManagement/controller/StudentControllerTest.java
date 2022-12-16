@@ -98,8 +98,8 @@ class StudentControllerTest {
                 .content(objectMapper.writeValueAsString(student)));
 
         // then
-        response.andDo(print()).
-                andExpect(status().isCreated())
+        response.andDo(print())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name",
                         is(student.getName())));
     }
