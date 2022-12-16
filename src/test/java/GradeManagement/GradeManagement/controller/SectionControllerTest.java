@@ -68,6 +68,20 @@ class SectionControllerTest {
     }
 
     @Test
+    void getSectionByInvalidId() throws Exception {
+        // given
+        Section section = new Section("Architecture and software quality", 4, 4);
+        sectionRepository.save(section);
+
+        // when
+        ResultActions response = mockMvc.perform(get("/api/sections/{id}", section.getId()+1));
+
+        // then
+        response.andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
     void createSection() {
     }
 
