@@ -126,7 +126,26 @@ class SectionControllerTest {
     }
 
     @Test
-    void deleteSection() {
+    void deleteSection() throws Exception {
+        // given
+        Section savedSection = new Section("Architecture and software quality", 4, 4);
+        sectionRepository.save(savedSection);
+        List<Section> listOfSections = new ArrayList<>();
+        listOfSections.add(new Section("Mobile development", 3, 4));
+        listOfSections.add(new Section("Software engineering 1", 7, 3));
+        sectionRepository.saveAll(listOfSections);
+
+        // when
+        ResultActions response = mockMvc.perform(delete("/api/sections/{id}", savedSection.getId()));
+        ResultActions get_response = mockMvc.perform(get("/api/sections"));
+
+        // then
+        response.andExpect(status().isNoContent())
+                .andDo(print());
+        get_response.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.size()",
+                        is(listOfSections.size())));
     }
 
     @Test
