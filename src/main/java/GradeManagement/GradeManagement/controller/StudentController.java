@@ -1,6 +1,5 @@
 package GradeManagement.GradeManagement.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,74 +13,53 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import GradeManagement.GradeManagement.exception.ResourceNotFoundException;
 import GradeManagement.GradeManagement.model.Student;
-import GradeManagement.GradeManagement.repository.StudentRepository;
+import GradeManagement.GradeManagement.service.StudentService;
+import io.swagger.v3.oas.annotations.Operation;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/api")
 public class StudentController {
-
     @Autowired
-    StudentRepository studentRepository;
+    StudentService studentService;
 
+    @Operation(summary = "Get all students")
     @GetMapping("/students")
-    public ResponseEntity<List<Student>> getAllStudents(@RequestParam(required = false) String name) {
-        List<Student> students = new ArrayList<Student>();
-
-        if (name == null)
-            studentRepository.findAll().forEach(students::add);
-        else
-            studentRepository.findByNameContaining(name).forEach(students::add);
-
-        if (students.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-
-        return new ResponseEntity<>(students, HttpStatus.OK);
+    public ResponseEntity<List<Student>> getAllStudents() {
+        return studentService.getAllStudents();
     }
 
+    @Operation(summary = "Get a student by id")
     @GetMapping("/students/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable("id") long id) {
-        Student student = studentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found Student with id = " + id));
-
-        return new ResponseEntity<>(student, HttpStatus.OK);
+        return studentService.getStudentById(id);
     }
 
+    @Operation(summary = "Create a new student")
     @PostMapping("/students")
     public ResponseEntity<Student> createStudent(@RequestBody Student student) {
-        Student _student = studentRepository
-                .save(new Student(student.getName()));
-        return new ResponseEntity<>(_student, HttpStatus.CREATED);
+        return studentService.createStudent(student);
     }
 
+    @Operation(summary = "Update a student by id")
     @PutMapping("/students/{id}")
     public ResponseEntity<Student> updateStudent(@PathVariable("id") long id, @RequestBody Student student) {
-        Student _student = studentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found student with id = " + id));
-
-        _student.setName(student.getName());
-
-        return new ResponseEntity<>(studentRepository.save(_student), HttpStatus.OK);
+        return studentService.updateStudent(id,student);
     }
 
+    @Operation(summary = "Delete a student by id")
     @DeleteMapping("/students/{id}")
     public ResponseEntity<HttpStatus> deleteStudent(@PathVariable("id") long id) {
-        studentRepository.deleteById(id);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return studentService.deleteStudent(id);
     }
 
+    @Operation(summary = "Delete all students")
     @DeleteMapping("/students")
     public ResponseEntity<HttpStatus> deleteAllStudents() {
-        studentRepository.deleteAll();
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return studentService.deleteAllStudents();
     }
 
 }

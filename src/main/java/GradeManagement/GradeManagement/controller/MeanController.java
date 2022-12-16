@@ -1,6 +1,5 @@
 package GradeManagement.GradeManagement.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import GradeManagement.GradeManagement.exception.ResourceNotFoundException;
-import GradeManagement.GradeManagement.model.Course;
-import GradeManagement.GradeManagement.model.GradeTable;
 import GradeManagement.GradeManagement.model.Mean;
-import GradeManagement.GradeManagement.model.Percentage;
 import GradeManagement.GradeManagement.model.Section;
 import GradeManagement.GradeManagement.model.Student;
-import GradeManagement.GradeManagement.repository.CourseRepository;
-import GradeManagement.GradeManagement.repository.GradeTableRepository;
-import GradeManagement.GradeManagement.repository.MeanRepository;
-import GradeManagement.GradeManagement.repository.PercentageRepository;
-import GradeManagement.GradeManagement.repository.SectionRepository;
-import GradeManagement.GradeManagement.repository.StudentRepository;
+import GradeManagement.GradeManagement.service.MeanService;
+import io.swagger.v3.oas.annotations.Operation;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -37,157 +28,59 @@ import GradeManagement.GradeManagement.repository.StudentRepository;
 public class MeanController {
 
   @Autowired
-  private StudentRepository studentRepository;
+  private MeanService meanService;
 
-  @Autowired
-  private SectionRepository sectionRepository;
-
-  @Autowired
-  private MeanRepository meanRepository;
-
-  @Autowired
-  private CourseRepository courseRepository;
-
-  @Autowired
-  private GradeTableRepository gradeTableRepository;
-
-  @Autowired
-  private PercentageRepository percentageRepository;
-
-
-
+  @Operation(summary = "Get all means")
   @GetMapping("/means") //ok
   public ResponseEntity<List<Mean>> getAllMeans(@RequestParam(required = false) Integer mean, @RequestParam(required = false) Student student, @RequestParam(required = false) Section section) {
-      List<Mean> means = new ArrayList<Mean>();
-
-      if (mean == null)
-          meanRepository.findAll().forEach(means::add);
-      else
-          meanRepository.findByMeanContaining(mean).forEach(means::add);
-
-      if (means.isEmpty()) {
-          return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-      }
-
-      return new ResponseEntity<>(means, HttpStatus.OK);
+    return meanService.getAllMeans();
   }
 
+  @Operation(summary = "Get a mean by sectionsId and studentId")
   @GetMapping("/sections/{sectionId}/students/{studentId}/means")
-  public ResponseEntity<List<Mean>> getAllMeansBystudentIdAndsectionId(@PathVariable(value = "studentId") Long studentId,@PathVariable(value = "sectionId") Long sectionId) {
-    if (!studentRepository.existsById(studentId)) {
-      throw new ResourceNotFoundException("Not found student with id = " + studentId);
-    }
-
-    if (!sectionRepository.existsById(sectionId)) {
-      throw new ResourceNotFoundException("Not found section with id = " + sectionId);
-    }
-
-    List<Mean> Means = meanRepository.findBySectionIdAndStudentId(sectionId,studentId);
-    return new ResponseEntity<>(Means, HttpStatus.OK);
+  public ResponseEntity<List<Mean>> getAllMeansBystudentIdAndsectionId(@PathVariable(value = "studentId") Long studentId, @PathVariable(value = "sectionId") Long sectionId) {
+    return meanService.getAllMeansBystudentIdAndsectionId(studentId, sectionId);
   }
 
-
+  @Operation(summary = "Get a mean by sectionId")
   @GetMapping("/sections/{sectionId}/means")
   public ResponseEntity<List<Mean>> getAllMeansBysectionId(@PathVariable(value = "sectionId") Long sectionId) {
-
-    if (!sectionRepository.existsById(sectionId)) {
-      throw new ResourceNotFoundException("Not found section with id = " + sectionId);
-    }
-
-    List<Mean> Means = meanRepository.findBySectionId(sectionId);
-    return new ResponseEntity<>(Means, HttpStatus.OK);
+    return meanService.getAllMeansBysectionId(sectionId);
   }
 
+  @Operation(summary = "Get a mean by studentId")
   @GetMapping("/students/{studentId}/means")
   public ResponseEntity<List<Mean>> getAllMeansBystudentId(@PathVariable(value = "studentId") Long studentId) {
-
-    if (!sectionRepository.existsById(studentId)) {
-      throw new ResourceNotFoundException("Not found section with id = " + studentId);
-    }
-
-    List<Mean> Means = meanRepository.findByStudentId(studentId);
-    return new ResponseEntity<>(Means, HttpStatus.OK);
+    return meanService.getAllMeansBystudentId(studentId);
   }
 
+  @Operation(summary = "Get a mean by its id")
   @GetMapping("/means/{id}")
   public ResponseEntity<Mean> getMeansById(@PathVariable(value = "id") Long id) {
-    Mean mean = meanRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Not found Mean with id = " + id));
-
-    return new ResponseEntity<>(mean, HttpStatus.OK);
+    return meanService.getMeansById(id);
   }
 
-  public void InscriptionCours(Long courseId, Long studentId, Integer schoolYear){
-
-
-      GradeTable gradeTableRequest = new GradeTable();
-
-      Course course = courseRepository.findById(courseId).orElseThrow(() -> new ResourceNotFoundException("Not found student with id = " + courseId));
-      gradeTableRequest.setCourse(course);
-      Student student = studentRepository.findById(studentId).orElseThrow(() -> new ResourceNotFoundException("Not found student with id = " + studentId));
-      gradeTableRequest.setStudent(student);
-      gradeTableRequest.setSchoolYear(schoolYear);
-      gradeTableRequest.setSemester(course.getSemester());
-      gradeTableRepository.save(gradeTableRequest);
-
-
-
-  };
-
+  @Operation(summary = "Create a mean by sectionId and studentId")
   @PostMapping("/sections/{sectionId}/students/{studentId}/means")
-  public ResponseEntity<Mean> createMean(@PathVariable(value = "sectionId") Long sectionId,@PathVariable(value = "studentId") Long studentId,
-      @RequestBody Mean MeanRequest) {
-
-    // Mean mean = sectionRepository.findById(sectionId).map(section -> {
-    //   MeanRequest.setSection(section);
-    // return MeanRepository.save(MeanRequest);
-
-    // }).orElseThrow(() -> new ResourceNotFoundException("Not found student with id = " + sectionId));;
-      Section section = sectionRepository.findById(sectionId).orElseThrow(() -> new ResourceNotFoundException("Not found student with id = " + sectionId));
-      MeanRequest.setSection(section);
-      Student student = studentRepository.findById(studentId).orElseThrow(() -> new ResourceNotFoundException("Not found student with id = " + studentId));
-      MeanRequest.setStudent(student);
-
-    meanRepository.save(MeanRequest);
-
-
-      List<Percentage> percentages = percentageRepository.findBySectionId(sectionId);
-
-      for ( Percentage percent : percentages) {
-        Long courseId = percent.getCourse().getId();
-        InscriptionCours(courseId,studentId,MeanRequest.getSchoolYear());
-      };
-
-    return new ResponseEntity<>(HttpStatus.CREATED);
+  public ResponseEntity<Mean> createMean(@PathVariable(value = "sectionId") Long sectionId, @PathVariable(value = "studentId") Long studentId, @RequestBody Mean MeanRequest) {
+    return meanService.createMean(sectionId, studentId, MeanRequest);
   }
 
+  @Operation(summary = "Update a mean by studentId and sectionId, register a student to a section")
   @PutMapping("/means/{sectionId}/{studentId}")
-  public ResponseEntity<Mean> updateMean(@PathVariable("sectionId") long sectionId,@PathVariable("studentId") long studentId, @RequestBody Mean MeanRequest) {
-    Mean Mean = meanRepository.findByStudentIdAndSectionIdAndSchoolYear(studentId,sectionId,MeanRequest.getSchoolYear());
-
-    Mean.setMean(MeanRequest.getMean());
-    Mean.setSchoolYear(MeanRequest.getSchoolYear());
-    return new ResponseEntity<>(meanRepository.save(Mean), HttpStatus.OK);
+  public ResponseEntity<Mean> updateMean(@PathVariable("sectionId") long sectionId, @PathVariable("studentId") long studentId, @RequestBody Mean MeanRequest) {
+    return meanService.updateMean(sectionId, sectionId, MeanRequest);
   }
 
+  @Operation(summary = "Delete a mean by id")
   @DeleteMapping("/means/{id}")
   public ResponseEntity<HttpStatus> deleteMean(@PathVariable("id") long id) {
-    meanRepository.deleteById(id);
-
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    return meanService.deleteMean(id);
   }
-  
+
+  @Operation(summary = "Delete a mean by sectionId and studentId")
   @DeleteMapping("/sections/{sectionsId}/students/{studentId}/means")
-  public ResponseEntity<List<Mean>> deleteAllMeansOfstudentAndsections(@PathVariable(value = "studentId") Long studentId, @PathVariable(value = "sectionId") Long sectionId) {
-    if (!studentRepository.existsById(studentId)) {
-      throw new ResourceNotFoundException("Not found student with id = " + studentId);
-    }
-
-    if (!sectionRepository.existsById(sectionId)) {
-      throw new ResourceNotFoundException("Not found section with id = " + sectionId);
-    }
-
-    meanRepository.deleteBySectionIdAndStudentId(sectionId, studentId);
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  public ResponseEntity<List<Mean>> deleteMeanOfstudentInSection(@PathVariable(value = "studentId") Long studentId, @PathVariable(value = "sectionId") Long sectionId) {
+    return meanService.deleteMeanOfstudentInSection(studentId, sectionId);
   }
 }
