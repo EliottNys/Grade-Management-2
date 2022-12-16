@@ -2,11 +2,13 @@ package GradeManagement.GradeManagement.controller;
 
 import GradeManagement.GradeManagement.model.Section;
 import GradeManagement.GradeManagement.repository.SectionRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -14,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -28,6 +30,9 @@ class SectionControllerTest {
 
     @Autowired
     private SectionRepository sectionRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setup() {sectionRepository.deleteAll();}
@@ -82,7 +87,21 @@ class SectionControllerTest {
     }
 
     @Test
-    void createSection() {
+    void createSection() throws Exception {
+        //given
+        Section section = new Section("Architecture and software quality", 4, 4);
+
+        //when
+        ResultActions response = mockMvc.perform(post("/api/sections")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(section)));
+
+        //then
+        response.andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name", is(section.getName())))
+                .andExpect(jsonPath("$.credits", is(section.getCredits())))
+                .andExpect(jsonPath("$.level", is(section.getLevel())));
     }
 
     @Test
