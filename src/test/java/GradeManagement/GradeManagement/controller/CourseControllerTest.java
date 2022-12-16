@@ -1,7 +1,6 @@
 package GradeManagement.GradeManagement.controller;
 
 import GradeManagement.GradeManagement.model.Course;
-import GradeManagement.GradeManagement.model.Student;
 import GradeManagement.GradeManagement.repository.CourseRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -146,6 +145,18 @@ class CourseControllerTest {
     }
 
     @Test
-    void deleteAllCourses() {
+    void deleteAllCourses() throws Exception {
+        // given
+        List<Course> listOfCourses = new ArrayList<>();
+        listOfCourses.add(new Course("Software Architecture"));
+        listOfCourses.add(new Course("Software Architecture and Quality Lab"));
+        courseRepository.saveAll(listOfCourses);
+
+        // when
+        ResultActions response = mockMvc.perform(delete("/api/courses"));
+
+        // then
+        response.andExpect(status().isNoContent())
+                .andDo(print());
     }
 }
